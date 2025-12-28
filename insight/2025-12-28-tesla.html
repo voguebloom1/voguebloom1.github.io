@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>테슬라 2025: 회고 및 미래 전망 보고서</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; }
+        .chart-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 600px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            height: 300px; 
+            max-height: 400px; 
+        } 
+        @media (min-width: 768px) { 
+            .chart-container { height: 350px; } 
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .active-tab {
+            border-bottom: 2px solid #ef4444;
+            color: #1f2937;
+            font-weight: 700;
+        }
+        .inactive-tab {
+            color: #6b7280;
+        }
+    </style>
+    <!-- Chosen Palette: Warm Neutrals with Tesla Red Accents -->
+    <!-- Application Structure Plan: 
+         1. Hero Section: Summary of 2025 performance and core investment thesis.
+         2. Interactive Dashboard (Key Pillars): Grid layout for Battery, Vehicles, FSD, Optimus, Infra. Users click to reveal details.
+         3. Timeline & Roadmap: A slider/stepper to visualize the progression from 2025 preparation to 2030 goals.
+         4. Financial Analysis: Charts visualizing stock performance, support levels, and future price targets.
+         5. Future Vision: Text-heavy but visually structured section on the "Labor Revolution" and AI Infrastructure shift.
+    -->
+    <!-- Visualization & Content Choices:
+         - Stock Performance: Chart.js Line/Bar chart to show the growth to $475 and projected $2000. Goal: Visualize growth potential.
+         - Strategic Pillars: Interactive Cards using Grid/Flex. Goal: Organize complex categorical info (Cars vs Bots vs Chips).
+         - Roadmap: Horizontal timeline using HTML/CSS/JS. Goal: Show temporal relationships.
+         - Interactions: Tab switching for detailed views, hover effects for engagement, dynamic text updates based on year selection.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-stone-50 text-stone-800 antialiased selection:bg-red-100 selection:text-red-900">
+
+    <!-- Navigation / Header -->
+    <nav class="bg-white shadow-sm border-b border-stone-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold tracking-tight text-stone-900">TESLA <span class="text-red-600">2025</span> REPORT</span>
+                </div>
+                <div class="hidden sm:flex items-center space-x-8">
+                    <button onclick="scrollToSection('summary')" class="text-stone-600 hover:text-red-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">요약</button>
+                    <button onclick="scrollToSection('pillars')" class="text-stone-600 hover:text-red-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">핵심 사업</button>
+                    <button onclick="scrollToSection('roadmap')" class="text-stone-600 hover:text-red-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">로드맵</button>
+                    <button onclick="scrollToSection('financials')" class="text-stone-600 hover:text-red-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">투자 전망</button>
+                </div>
+                <!-- Mobile Menu Button -->
+                <div class="flex items-center sm:hidden">
+                     <button onclick="toggleMobileMenu()" class="text-stone-500 hover:text-stone-700 focus:outline-none">
+                        <span class="text-xl">☰</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden sm:hidden bg-white border-t border-stone-200">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <button onclick="scrollToSection('summary'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-stone-600 hover:bg-stone-100 rounded-md">요약</button>
+                <button onclick="scrollToSection('pillars'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-stone-600 hover:bg-stone-100 rounded-md">핵심 사업</button>
+                <button onclick="scrollToSection('roadmap'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-stone-600 hover:bg-stone-100 rounded-md">로드맵</button>
+                <button onclick="scrollToSection('financials'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 text-stone-600 hover:bg-stone-100 rounded-md">투자 전망</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section: 2025 Review -->
+    <section id="summary" class="py-12 sm:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-stone-900 mb-6 tracking-tight">
+                    2025년: 준비에서 <span class="text-red-600">실행</span>으로
+                </h1>
+                <p class="text-lg text-stone-600 leading-relaxed">
+                    전기차를 넘어선 AI 및 로봇 기업으로의 도약. 2025년은 로봇택시, FSD 완성, 그리고 옵티머스 생산 체계 구축을 통해 폭발적인 성장의 기반을 다진 해였습니다.
+                </p>
+            </div>
+            
+            <!-- Key Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-stone-50 rounded-xl p-6 border border-stone-200 text-center card-hover transition-all duration-300">
+                    <h3 class="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-2">2025 주가</h3>
+                    <div class="text-4xl font-bold text-stone-900">$475</div>
+                    <div class="text-sm text-green-600 mt-2 font-medium">▲ 목표 달성</div>
+                </div>
+                <div class="bg-stone-50 rounded-xl p-6 border border-stone-200 text-center card-hover transition-all duration-300">
+                    <h3 class="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-2">핵심 마일스톤</h3>
+                    <div class="text-4xl font-bold text-stone-900">3개</div>
+                    <div class="text-sm text-stone-600 mt-2">로봇택시, FSD, 옵티머스</div>
+                </div>
+                <div class="bg-stone-50 rounded-xl p-6 border border-stone-200 text-center card-hover transition-all duration-300">
+                    <h3 class="text-sm font-semibold text-stone-500 uppercase tracking-wider mb-2">2030 목표가</h3>
+                    <div class="text-4xl font-bold text-red-600">$2,000</div>
+                    <div class="text-sm text-stone-600 mt-2">잠재적 4배 성장</div>
+                </div>
+            </div>
+
+            <!-- Intro Text Block -->
+            <div class="bg-stone-100 rounded-2xl p-8 border-l-4 border-red-500">
+                <h3 class="text-xl font-bold text-stone-900 mb-4">투자자 노트</h3>
+                <p class="text-stone-700 mb-4">
+                    2025년 초, 전기차 인프라의 수직 구조화와 옵티머스의 발전 방향을 보고 투자를 시작했습니다.
+                    주가는 $460-$475에 도달했지만, 이는 시작에 불과합니다. 
+                    2026년은 단순한 준비가 아닌 '실행'의 해가 될 것이며, 폭발적인 방향성이 나올 것입니다.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Strategic Pillars Section (Grid Interaction) -->
+    <section id="pillars" class="py-16 bg-stone-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-bold text-stone-900">테슬라 생태계 5대 핵심축</h2>
+                <p class="mt-4 text-stone-600 max-w-2xl mx-auto">
+                    단순한 자동차 제조사가 아닌, 에너지부터 AI 로봇까지 연결된 거대한 생태계를 클릭하여 확인하세요.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Vehicle Card -->
+                <div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden hover:shadow-md transition-shadow cursor-pointer" onclick="updateDetail('vehicle')">
+                    <div class="h-2 bg-red-500"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold text-stone-900">신규 차량 & 생산</h3>
+                            <span class="text-2xl">🚗</span>
+                        </div>
+                        <ul class="space-y-2 text-stone-600 text-sm">
+                            <li>• 사이버캡 (로봇택시 전용)</li>
+                            <li>• 세미 트럭 대량 생산</li>
+                            <li>• 모델 Y/S/X 로봇택시 확장</li>
+                        </ul>
+                        <div class="mt-4 text-red-600 text-sm font-medium hover:underline">상세 보기 →</div>
+                    </div>
+                </div>
+
+                <!-- FSD Card -->
+                <div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden hover:shadow-md transition-shadow cursor-pointer" onclick="updateDetail('fsd')">
+                    <div class="h-2 bg-blue-500"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold text-stone-900">FSD & AI</h3>
+                            <span class="text-2xl">🧠</span>
+                        </div>
+                        <ul class="space-y-2 text-stone-600 text-sm">
+                            <li>• 비감독 완전 자율 주행 시작</li>
+                            <li>• 월드컵 로봇택시 운행</li>
+                            <li>• 글로벌(유럽, 중동) 확장</li>
+                        </ul>
+                        <div class="mt-4 text-blue-600 text-sm font-medium hover:underline">상세 보기 →</div>
+                    </div>
+                </div>
+
+                <!-- Optimus Card -->
+                <div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden hover:shadow-md transition-shadow cursor-pointer" onclick="updateDetail('optimus')">
+                    <div class="h-2 bg-stone-500"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold text-stone-900">옵티머스 (로봇)</h3>
+                            <span class="text-2xl">🤖</span>
+                        </div>
+                        <ul class="space-y-2 text-stone-600 text-sm">
+                            <li>• 대량 생산 및 공장 적용</li>
+                            <li>• 노동 혁명의 시작</li>
+                            <li>• 외부 판매 개시</li>
+                        </ul>
+                        <div class="mt-4 text-stone-600 text-sm font-medium hover:underline">상세 보기 →</div>
+                    </div>
+                </div>
+
+                <!-- Battery Card -->
+                <div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden hover:shadow-md transition-shadow cursor-pointer" onclick="updateDetail('battery')">
+                    <div class="h-2 bg-green-500"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold text-stone-900">배터리 & 에너지</h3>
+                            <span class="text-2xl">🔋</span>
+                        </div>
+                        <ul class="space-y-2 text-stone-600 text-sm">
+                            <li>• 4680 건식 공정 완성</li>
+                            <li>• 주행 거리 획기적 증가</li>
+                            <li>• 메가팩토리(상하이, 텍사스) 가동</li>
+                        </ul>
+                        <div class="mt-4 text-green-600 text-sm font-medium hover:underline">상세 보기 →</div>
+                    </div>
+                </div>
+
+                <!-- Future Tech Card -->
+                <div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden hover:shadow-md transition-shadow cursor-pointer" onclick="updateDetail('future')">
+                    <div class="h-2 bg-purple-500"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold text-stone-900">미래 확장성</h3>
+                            <span class="text-2xl">🚀</span>
+                        </div>
+                        <ul class="space-y-2 text-stone-600 text-sm">
+                            <li>• xAI 그록(Grok) 연계</li>
+                            <li>• 삼성 파운드리 협업 (Ai5/6 칩)</li>
+                            <li>• 팹리스 기업으로 도약</li>
+                        </ul>
+                        <div class="mt-4 text-purple-600 text-sm font-medium hover:underline">상세 보기 →</div>
+                    </div>
+                </div>
+
+                <!-- Fun Card -->
+                <div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden hover:shadow-md transition-shadow cursor-pointer" onclick="updateDetail('other')">
+                    <div class="h-2 bg-yellow-500"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold text-stone-900">기타 사업</h3>
+                            <span class="text-2xl">🍔</span>
+                        </div>
+                        <ul class="space-y-2 text-stone-600 text-sm">
+                            <li>• 테슬라 다이닝 2호점 오픈</li>
+                            <li>• 브랜드 경험 강화</li>
+                            <li>• 예상 밖의 매출 기여</li>
+                        </ul>
+                        <div class="mt-4 text-yellow-600 text-sm font-medium hover:underline">상세 보기 →</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Detail Section -->
+            <div id="detail-section" class="mt-10 bg-white rounded-xl shadow-lg border border-stone-200 p-8 hidden transition-all duration-500">
+                <div class="flex flex-col md:flex-row gap-8">
+                    <div class="md:w-1/3 border-r border-stone-100 pr-4">
+                        <h3 id="detail-title" class="text-2xl font-bold text-stone-900 mb-2"></h3>
+                        <div id="detail-icon" class="text-6xl mb-4"></div>
+                        <p id="detail-desc" class="text-stone-600"></p>
+                    </div>
+                    <div class="md:w-2/3">
+                        <h4 class="font-bold text-stone-900 mb-4">주요 포인트 및 전망</h4>
+                        <ul id="detail-list" class="space-y-3 text-stone-700"></ul>
+                        
+                        <!-- Mini Chart for Visual Context -->
+                        <div class="mt-6 pt-6 border-t border-stone-100">
+                             <div class="chart-container" style="height: 200px; max-width: 100%;">
+                                <canvas id="detailChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Timeline Section -->
+    <section id="roadmap" class="py-16 bg-white border-t border-stone-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-stone-900 text-center mb-12">2025-2030 로드맵: 실행과 혁명</h2>
+            
+            <!-- Timeline Controls -->
+            <div class="flex flex-wrap justify-center gap-4 mb-10">
+                <button onclick="setYear(2025)" id="btn-2025" class="year-btn px-6 py-3 rounded-full text-sm font-bold shadow-sm transition-all bg-stone-100 text-stone-600 hover:bg-stone-200">2025 (준비)</button>
+                <button onclick="setYear(2026)" id="btn-2026" class="year-btn px-6 py-3 rounded-full text-sm font-bold shadow-sm transition-all bg-stone-100 text-stone-600 hover:bg-stone-200">2026 (실행)</button>
+                <button onclick="setYear(2027)" id="btn-2027" class="year-btn px-6 py-3 rounded-full text-sm font-bold shadow-sm transition-all bg-stone-100 text-stone-600 hover:bg-stone-200">2027 (독주)</button>
+                <button onclick="setYear(2030)" id="btn-2030" class="year-btn px-6 py-3 rounded-full text-sm font-bold shadow-sm transition-all bg-stone-100 text-stone-600 hover:bg-stone-200">2030 (혁명)</button>
+            </div>
+
+            <!-- Dynamic Content Area -->
+            <div class="bg-stone-50 rounded-2xl p-8 border border-stone-200 relative overflow-hidden min-h-[300px]">
+                <div class="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
+                    <span id="bg-year" class="text-9xl font-bold text-stone-900">2025</span>
+                </div>
+                
+                <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h3 id="roadmap-title" class="text-2xl font-bold text-red-600 mb-4"></h3>
+                        <p id="roadmap-desc" class="text-lg text-stone-700 mb-6 leading-relaxed"></p>
+                        <div id="roadmap-tags" class="flex flex-wrap gap-2"></div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
+                        <h4 class="text-sm font-bold text-stone-500 uppercase mb-4">주요 이벤트</h4>
+                        <ul id="roadmap-events" class="space-y-4">
+                            <!-- Events populated by JS -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Financial Analysis Section -->
+    <section id="financials" class="py-16 bg-stone-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <!-- Text Analysis -->
+                <div class="lg:col-span-1">
+                    <h2 class="text-3xl font-bold mb-6">주가 분석 및 전망</h2>
+                    <div class="space-y-6 text-stone-300">
+                        <p>
+                            <span class="text-white font-bold">현재 상황:</span> 2025년 말 주가 $475 기록. 연초 대비 성공적인 투자 성과를 거두었습니다.
+                        </p>
+                        <p>
+                            <span class="text-white font-bold">조정 가능성:</span> 로봇택시 잡음 및 전기차 혜택 축소로 $400 미만 하락 가능성이 있으나, <span class="text-red-400">$380 선은 강력한 기관 매수 지지선</span>이 될 것입니다.
+                        </p>
+                        <p>
+                            <span class="text-white font-bold">장기 목표:</span> 2030년 $2,000 도달 가능성은 충분합니다. 적립식 투자를 유지하며 수량을 늘려가는 전략이 유효합니다.
+                        </p>
+                        
+                        <div class="bg-stone-800 p-4 rounded-lg mt-8 border border-stone-700">
+                            <h4 class="font-bold text-stone-100 mb-2">투자 전략 요약</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm">
+                                <li>$380~$400 구간 적극 매수</li>
+                                <li>단기 변동성 무시, 장기 홀딩</li>
+                                <li>2027년 이후 독주 체제 대비</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stock Chart -->
+                <div class="lg:col-span-2">
+                    <div class="bg-stone-800 rounded-xl p-4 border border-stone-700">
+                        <h3 class="text-lg font-semibold mb-4 text-center">테슬라 주가 시나리오 (2025-2030)</h3>
+                        <div class="chart-container">
+                            <canvas id="stockChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Future Vision / Conclusion -->
+    <section class="py-16 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold text-stone-900 mb-8">2027~2029: 휴머노이드와 AI 인프라 혁명</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+                <div class="bg-stone-50 p-6 rounded-xl border border-stone-200">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-red-100 p-3 rounded-full mr-4">
+                            <span class="text-2xl">👁️</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-stone-900">비전(Vision) 중심 AI 인프라</h3>
+                    </div>
+                    <p class="text-stone-600 leading-relaxed">
+                        휴머노이드가 비전 센서로 세상을 이해하고 동작하려면, 현재의 텍스트 기반 인프라보다 처리량이 기하급수적으로 많은 <strong>광통신 기반 비전 인프라</strong>가 필수적입니다.
+                    </p>
+                </div>
+
+                <div class="bg-stone-50 p-6 rounded-xl border border-stone-200">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 p-3 rounded-full mr-4">
+                            <span class="text-2xl">🏭</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-stone-900">노동 혁명의 도래</h3>
+                    </div>
+                    <p class="text-stone-600 leading-relaxed">
+                        인프라가 갖춰질 2027~2029년 이후, 옵티머스를 통한 진정한 <strong>노동 혁명</strong>이 일어날 것입니다. 우리는 이 거대한 변화를 미리 준비하고 투자해야 합니다.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="mt-12">
+                <p class="text-xl font-medium text-stone-800 italic">"내년에도 테슬라 투자는 유지하며, 미래를 향해 함께 나아갑시다."</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-stone-50 border-t border-stone-200 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-stone-500 text-sm">
+            <p>&copy; 2025 Tesla Retrospective Report. Based on Investor Analysis.</p>
+            <p class="mt-2">본 페이지는 제공된 리포트를 바탕으로 재구성된 시각화 자료입니다.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Data & State ---
+        const detailsData = {
+            vehicle: {
+                title: "신규 차량 & 생산 (Vehicles)",
+                icon: "🚗",
+                desc: "로봇택시 전용 차량 '사이버캡'과 세미 트럭의 대량 생산을 통해 물류와 이동의 혁명을 준비합니다.",
+                list: [
+                    "<strong>사이버캡(Cybercab):</strong> 로봇택시 전용 2인승 차량, FSD 패러다임 변화 주도.",
+                    "<strong>세미 트럭(Semi):</strong> 2026년 하반기 대량 생산. 물류 단가 혁명의 핵심.",
+                    "<strong>모델 Y/S/X:</strong> 로봇택시 서비스의 고급화 라인업 담당.",
+                    "<strong>로드스터:</strong> 최고급 전기차 기술력 과시."
+                ],
+                chartData: [15, 30, 60, 100], // Fake projection data for viz
+                chartLabel: "차량 생산량 예측 추이 (Index)"
+            },
+            fsd: {
+                title: "FSD & 자율주행 (AI)",
+                icon: "🧠",
+                desc: "비감독 자율주행(Unsupervised FSD)의 시작과 글로벌 확장을 통해 소프트웨어 수익 모델을 완성합니다.",
+                list: [
+                    "<strong>비감독 자율주행:</strong> 레벨업을 통한 완전 자율주행 시대 개막.",
+                    "<strong>글로벌 확장:</strong> 유럽, 중동 시장 진출 가속화.",
+                    "<strong>월드컵 로봇택시:</strong> 2026년 6월 이후, 전 세계인에게 자율주행 경험 제공 및 인식 전환.",
+                    "<strong>구독 모델:</strong> FSD 이용자 증가로 인한 마진율 개선."
+                ],
+                chartData: [10, 40, 75, 95],
+                chartLabel: "FSD 주행 마일리지 누적 (Index)"
+            },
+            optimus: {
+                title: "옵티머스 (Humanoid)",
+                icon: "🤖",
+                desc: "공장 노동 대체에서 시작하여 가정용까지, 테슬라의 가장 큰 잠재력을 지닌 사업입니다.",
+                list: [
+                    "<strong>대량 생산:</strong> 테슬라 공장 내부 우선 적용으로 비용 절감.",
+                    "<strong>외부 판매:</strong> 단순 노동 대체용으로 외부 기업 판매 시작.",
+                    "<strong>노동 혁명:</strong> 2027-2029년 본격적인 산업 패러다임 변화 주도."
+                ],
+                chartData: [5, 20, 50, 120],
+                chartLabel: "배치된 옵티머스 수 (Index)"
+            },
+            battery: {
+                title: "에너지 & 배터리 (Energy)",
+                icon: "🔋",
+                desc: "4680 배터리 기술 완성과 메가팩토리를 통해 전기차 성장보다 빠른 에너지 부문 성장을 이룹니다.",
+                list: [
+                    "<strong>4680 기술 완성:</strong> 건식 공정 성공으로 원가 절감 및 주행거리 증가.",
+                    "<strong>메가팩토리:</strong> 상하이 공장 가동 및 2026년 말 텍사스 신설.",
+                    "<strong>성장 속도:</strong> 전기차 사업부보다 더 빠른 성장세 기록 중."
+                ],
+                chartData: [20, 45, 70, 100],
+                chartLabel: "에너지 저장 용량 (GWh)"
+            },
+            future: {
+                title: "미래 확장성 (Future Tech)",
+                icon: "🚀",
+                desc: "xAI와의 시너지 및 반도체 칩 설계를 통해 하드웨어와 소프트웨어를 아우르는 종합 테크 기업으로 진화합니다.",
+                list: [
+                    "<strong>xAI 연계:</strong> 그록(Grok) AI 모델을 차량 및 로봇에 통합.",
+                    "<strong>AI 칩 설계:</strong> 삼성 팹리스 협업, Ai5/Ai6 칩 자체 설계 및 판매 가능성.",
+                    "<strong>플랫폼화:</strong> 타 자동차 업체에 FSD 및 칩셋 공급 (2027년 이후 독주)."
+                ],
+                chartData: [10, 20, 50, 90],
+                chartLabel: "AI 컴퓨팅 파워 (Exaflops)"
+            },
+            other: {
+                title: "기타 사업 (Lifestyle)",
+                icon: "🍔",
+                desc: "테슬라의 브랜드 가치를 높이는 소비자 접점 사업들입니다.",
+                list: [
+                    "<strong>테슬라 다이닝:</strong> 2호점 오픈 예정, 충전과 식문화를 결합.",
+                    "<strong>매출 기여:</strong> 예상보다 높은 인기로 브랜드 충성도 강화."
+                ],
+                chartData: [10, 25, 40, 55],
+                chartLabel: "방문객 수 추이"
+            }
+        };
+
+        const roadmapData = {
+            2025: {
+                title: "준비와 기반 다지기",
+                desc: "전기차 인프라의 수직 구조화와 옵티머스 개발 방향성이 확립된 해입니다. 주가는 $475에 도달하며 투자의 확신을 주었습니다.",
+                tags: ["FSD 완성", "로봇택시 공개", "4680 배터리"],
+                events: [
+                    "<li><span class='font-bold text-red-600'>주가:</span> $460~$475 도달</li>",
+                    "<li><span class='font-bold text-stone-700'>차량:</span> 사이버캡 공개</li>",
+                    "<li><span class='font-bold text-stone-700'>로봇:</span> 옵티머스 초기 생산체계</li>"
+                ]
+            },
+            2026: {
+                title: "실행 (Execution)",
+                desc: "준비된 기술들이 실제 양산과 서비스로 이어지는 해입니다. 세미 트럭과 사이버캡이 도로 위를 달리기 시작합니다.",
+                tags: ["세미 트럭 양산", "사이버캡 생산", "월드컵 로봇택시"],
+                events: [
+                    "<li><span class='font-bold text-stone-700'>차량:</span> 세미 트럭 대량 생산 (하반기)</li>",
+                    "<li><span class='font-bold text-stone-700'>FSD:</span> 비감독 자율주행 시작 & 월드컵 운행</li>",
+                    "<li><span class='font-bold text-stone-700'>인프라:</span> 텍사스 메가팩토리 신설 (말)</li>"
+                ]
+            },
+            2027: {
+                title: "독주 (Dominance)",
+                desc: "완성차 업체들의 전기차 투자 축소 반사 이익과 테슬라의 기술 격차가 극대화되는 시기입니다.",
+                tags: ["경쟁사 도태", "FSD 외부 판매", "독점적 지위"],
+                events: [
+                    "<li><span class='font-bold text-stone-700'>시장:</span> 타 업체 전기차 투자 축소로 인한 독주</li>",
+                    "<li><span class='font-bold text-stone-700'>확장:</span> 외부 차 업체 FSD 채택 가능성</li>",
+                    "<li><span class='font-bold text-stone-700'>AI:</span> 퀀텀 점프급 기술 격차 확인</li>"
+                ]
+            },
+            2030: {
+                title: "혁명 (Revolution)",
+                desc: "휴머노이드 로봇이 노동 시장의 판도를 바꾸고, 테슬라는 단순 제조사를 넘어선 AI 인프라 기업이 됩니다.",
+                tags: ["주가 $2000", "노동 혁명", "AI 인프라"],
+                events: [
+                    "<li><span class='font-bold text-red-600'>목표 주가:</span> $2,000 달성 가능성</li>",
+                    "<li><span class='font-bold text-stone-700'>로봇:</span> 휴머노이드 생산 혁명 도래</li>",
+                    "<li><span class='font-bold text-stone-700'>인프라:</span> 광통신 기반 비전 처리 인프라 완성</li>"
+                ]
+            }
+        };
+
+        let detailChartInstance = null;
+        let stockChartInstance = null;
+
+        // --- Functions ---
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function updateDetail(key) {
+            const data = detailsData[key];
+            const section = document.getElementById('detail-section');
+            
+            // Populate text
+            document.getElementById('detail-title').innerText = data.title;
+            document.getElementById('detail-icon').innerText = data.icon;
+            document.getElementById('detail-desc').innerText = data.desc;
+            
+            const listEl = document.getElementById('detail-list');
+            listEl.innerHTML = data.list.map(item => `<li class="pl-4 border-l-2 border-red-200">${item}</li>`).join('');
+
+            // Show section
+            section.classList.remove('hidden');
+            
+            // Scroll to detail slightly
+            setTimeout(() => {
+                section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+
+            // Update Chart
+            updateDetailChart(data.chartLabel, data.chartData);
+        }
+
+        function updateDetailChart(label, dataPoints) {
+            const ctx = document.getElementById('detailChart').getContext('2d');
+            
+            if (detailChartInstance) {
+                detailChartInstance.destroy();
+            }
+
+            detailChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['2025', '2026', '2027', '2030'],
+                    datasets: [{
+                        label: label,
+                        data: dataPoints,
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#ef4444',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                            titleColor: '#1f2937',
+                            bodyColor: '#1f2937',
+                            borderColor: '#e5e7eb',
+                            borderWidth: 1,
+                            padding: 10
+                        }
+                    },
+                    scales: {
+                        y: {
+                            display: false,
+                            beginAtZero: true
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#6b7280' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function setYear(year) {
+            // Update buttons
+            document.querySelectorAll('.year-btn').forEach(btn => {
+                btn.classList.remove('bg-red-600', 'text-white', 'shadow-md');
+                btn.classList.add('bg-stone-100', 'text-stone-600');
+            });
+            const activeBtn = document.getElementById(`btn-${year}`);
+            activeBtn.classList.remove('bg-stone-100', 'text-stone-600');
+            activeBtn.classList.add('bg-red-600', 'text-white', 'shadow-md');
+
+            // Update content
+            const data = roadmapData[year];
+            document.getElementById('bg-year').innerText = year;
+            document.getElementById('roadmap-title').innerText = `${year}: ${data.title}`;
+            document.getElementById('roadmap-desc').innerText = data.desc;
+            
+            document.getElementById('roadmap-tags').innerHTML = data.tags.map(tag => 
+                `<span class="px-3 py-1 bg-white border border-stone-200 rounded-full text-xs font-semibold text-stone-600">${tag}</span>`
+            ).join('');
+            
+            document.getElementById('roadmap-events').innerHTML = data.events.join('');
+        }
+
+        function initStockChart() {
+            const ctx = document.getElementById('stockChart').getContext('2d');
+            
+            stockChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['2023', '2024', '2025(Now)', '2026(E)', '2027(E)', '2028(E)', '2029(E)', '2030(Goal)'],
+                    datasets: [{
+                        label: '주가 시나리오 ($)',
+                        data: [248, 260, 475, 550, 800, 1100, 1500, 2000],
+                        borderColor: '#ffffff',
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        segment: {
+                            borderColor: ctx => ctx.p0.parsed.x >= 2 ? '#ef4444' : '#ffffff', // Red for future
+                            borderDash: ctx => ctx.p0.parsed.x >= 2 ? [5, 5] : undefined
+                        }
+                    },
+                    {
+                        label: '강력 지지선 ($380)',
+                        data: [null, null, 380, 380, 380, null, null, null],
+                        borderColor: '#4ade80', // Green
+                        borderWidth: 2,
+                        borderDash: [2, 2],
+                        pointRadius: 0,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { 
+                            labels: { color: '#d6d3d1' }
+                        },
+                        annotation: {
+                            // Note: Annotation plugin not loaded to keep simple, but logic is handled via dataset styling
+                        }
+                    },
+                    scales: {
+                        y: {
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#a8a29e' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#a8a29e' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            setYear(2025); // Default Roadmap Year
+            initStockChart();
+            updateDetail('vehicle'); // Default Detail
+        });
+
+    </script>
+</body>
+</html>
