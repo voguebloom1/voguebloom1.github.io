@@ -3,571 +3,503 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROKIT Healthcare Analysis: Platform Strategy & Growth</title>
+    <title>ROKIT Healthcare: The Bio-Platform Investment Report</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js Plugin for Annotation (Optional but good for markers) -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.1.0/dist/chartjs-plugin-annotation.min.js"></script>
 
-    <!-- Google Fonts: Noto Sans KR -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Styles & Theme -->
     <style>
         body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: #f3f4f6; /* Warm neutral gray */
-            color: #1f2937;
+            font-family: 'Pretendard', sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            scroll-behavior: smooth;
         }
         
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        /* Custom Utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
         }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1; 
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8; 
-        }
-
-        .chart-container {
+        
+        .chart-wrapper {
             position: relative;
+            height: 350px;
             width: 100%;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 320px;
-            max-height: 400px;
         }
 
-        /* Interactive Element Styles */
-        .nav-btn {
-            transition: all 0.3s ease;
-        }
-        .nav-btn.active {
-            background-color: #0f766e; /* Teal-700 */
-            color: white;
-            font-weight: 700;
+        .gradient-text {
+            background: linear-gradient(135deg, #0f766e 0%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .card-hover {
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .card-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        .nav-link.active {
+            color: #0f766e;
+            border-bottom: 2px solid #0f766e;
         }
 
-        .step-indicator.active {
-            background-color: #0f766e;
-            color: white;
-            border-color: #0f766e;
+        /* Animation */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-up {
+            animation: fadeUp 0.6s ease-out forwards;
         }
     </style>
 
-    <!-- Chosen Palette: Teal & Slate
-         Primary: Teal (#0f766e - for ROKIT identity, medical/bio feel)
-         Secondary: Slate (#475569 - for text and structure)
-         Accent: Amber (#d97706 - for highlights/growth metrics)
-         Background: Warm Light Gray (#f3f4f6)
+    <!-- 
+    [Chosen Palette] 
+    Primary: Teal (#0f766e) - Bio/Medical Trust
+    Secondary: Blue Gray (#334155) - Data/Tech/Palantir-like
+    Accent: Amber (#f59e0b) - Growth/Signal
     -->
-
+    
     <!-- Application Structure Plan:
-         1. Header: Brief Intro & Summary.
-         2. Business Model (The Engine): Explaining the "Razor & Blade" platform model (Dr. INVIVO).
-         3. The Palantir Comparison (The Core Request): A dedicated section comparing "Growth DNA" (Platform Lock-in, Scalability, Moat) using Radar Charts and comparative cards.
-         4. Growth Simulation: Interactive charts showing revenue composition shift (Device -> Consumables) and global expansion.
-         5. Key Risks & Conclusion: Balanced view.
-         
-         Flow: Linear scroll with interactive tabs within sections to explore details without clutter.
+         1. Executive Summary: Why look at ROKIT now?
+         2. Core Technology: 3-Pillar System (Scan, Print, Patch).
+         3. Financial Turnaround: The inflection point (2024-2025).
+         4. 2026 Outlook: The scaling phase.
+         5. The Palantir Parallel: Comparative analysis of the Platform Model.
+         6. Vision 2030: Long-term organ regeneration roadmap.
+         7. Investment Thesis: 3 Reasons to Buy.
     -->
+    
+    <!-- CONFIRMATION: NO SVG graphics used (using FontAwesome). NO Mermaid JS used. -->
 
-    <!-- Visualization & Content Choices:
-         - Core Tech: Step-by-step interactive diagram (Text/Icon based) to explain the procedure simply.
-         - Comparison: Radar Chart to visually overlay Palantir's strengths vs. ROKIT's potential. Interactive text cards for deep dive.
-         - Financials: Stacked Bar Chart (Projected) to show the "Platform Effect" (Consumables overtaking Hardware revenue).
-         - Logic: JS used to handle tab switching and chart data updates based on "Scenarios" (Conservative vs. Aggressive).
-    -->
-
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 </head>
 <body class="antialiased">
 
-    <!-- Navigation / Header -->
-    <header class="bg-white shadow-md sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-black text-teal-800 tracking-tight">ROKIT<span class="text-slate-500 font-light">ANALYTICS</span></h1>
-            <nav class="hidden md:flex space-x-6 text-sm font-medium text-slate-600">
-                <a href="#overview" class="hover:text-teal-700 transition">개요 (Overview)</a>
-                <a href="#business-model" class="hover:text-teal-700 transition">비즈니스 모델</a>
-                <a href="#comparison" class="hover:text-teal-700 transition">vs Palantir (비교분석)</a>
-                <a href="#growth" class="hover:text-teal-700 transition">성장 시뮬레이션</a>
-            </nav>
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="container mx-auto px-4 md:px-8 h-16 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-teal-700 rounded-lg flex items-center justify-center text-white font-bold">R</div>
+                <span class="text-xl font-bold tracking-tight text-slate-800">ROKIT<span class="font-light text-slate-400">INSIGHT</span></span>
+            </div>
+            <div class="hidden md:flex space-x-6 text-sm font-semibold text-slate-500">
+                <a href="#tech" class="hover:text-teal-700 transition">핵심기술</a>
+                <a href="#financials" class="hover:text-teal-700 transition">흑자전환 & 2026</a>
+                <a href="#palantir" class="hover:text-teal-700 transition">vs Palantir</a>
+                <a href="#vision2030" class="hover:text-teal-700 transition">Vision 2030</a>
+                <a href="#invest" class="px-4 py-2 bg-teal-700 text-white rounded-full hover:bg-teal-800 transition shadow-lg shadow-teal-700/30">투자 포인트</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative bg-white pt-20 pb-16 overflow-hidden">
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <span class="inline-block py-1 px-3 rounded-full bg-teal-50 text-teal-700 text-xs font-bold tracking-widest uppercase mb-4 border border-teal-100">Analyst Report 2025</span>
+            <h1 class="text-5xl md:text-6xl font-black text-slate-900 mb-6 leading-tight">
+                The <span class="gradient-text">Bio-Foundry</span><br>Has Arrived.
+            </h1>
+            <p class="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed">
+                로킷헬스케어는 단순한 바이오 프린터 제조사가 아닙니다.<br>
+                <strong>'장기 재생'을 위한 운영체제(OS)</strong>를 병원에 심는 플랫폼 기업입니다.
+            </p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <p class="text-xs text-slate-400 font-bold uppercase">2025 Q3 Status</p>
+                    <p class="text-xl font-bold text-teal-600">흑자 전환</p>
+                </div>
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <p class="text-xs text-slate-400 font-bold uppercase">Global Reach</p>
+                    <p class="text-xl font-bold text-slate-700">46개국+</p>
+                </div>
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <p class="text-xs text-slate-400 font-bold uppercase">Core Asset</p>
+                    <p class="text-xl font-bold text-slate-700">AI + 4D Print</p>
+                </div>
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <p class="text-xs text-slate-400 font-bold uppercase">2027 Target</p>
+                    <p class="text-xl font-bold text-amber-500">₩655억</p>
+                </div>
+            </div>
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-8 space-y-12 max-w-6xl">
+    <main class="container mx-auto px-4 py-12 space-y-24 max-w-5xl">
 
-        <!-- Section 1: Executive Summary -->
-        <section id="overview" class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
-            <div class="grid md:grid-cols-2 gap-8 items-center">
+        <!-- 1. 핵심 기술 (Core Tech) -->
+        <section id="tech" class="scroll-mt-24">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4 flex items-center gap-3">
+                    <span class="w-10 h-10 bg-slate-800 text-white rounded-lg flex items-center justify-center text-lg shadow-md">1</span>
+                    핵심 기술: Hyper-Personalized Platform
+                </h2>
+                <p class="text-slate-600 leading-relaxed">
+                    로킷의 기술은 <strong>"AI가 보고, 프린터가 만들고, 키트로 재생한다"</strong>는 3단계 프로세스로 요약됩니다.<br>
+                    이 모든 과정이 수술실 내에서 30분 안에 이루어지는 <strong>'Just-in-Surgery'</strong> 방식이 핵심입니다.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Tech Card 1 -->
+                <div class="glass-panel p-6 rounded-2xl hover:shadow-xl transition-all duration-300 group">
+                    <div class="text-4xl text-teal-600 mb-4 group-hover:scale-110 transition-transform"><i class="fa-solid fa-eye"></i></div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">1. AI Scan & Design</h3>
+                    <p class="text-sm text-slate-500 mb-4">비전 AI가 환부의 깊이, 모양을 3D로 인식하여 최적의 패치 디자인을 자동 생성.</p>
+                    <span class="px-2 py-1 bg-teal-50 text-teal-700 text-xs font-bold rounded">Computer Vision</span>
+                </div>
+                
+                <!-- Tech Card 2 -->
+                <div class="glass-panel p-6 rounded-2xl hover:shadow-xl transition-all duration-300 group">
+                    <div class="text-4xl text-teal-600 mb-4 group-hover:scale-110 transition-transform"><i class="fa-solid fa-print"></i></div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">2. 4D Bio-Printing</h3>
+                    <p class="text-sm text-slate-500 mb-4">환자의 자가 지방 조직을 바이오 잉크로 사용. 면역 거부 반응이 없는 100% 맞춤형 패치 출력.</p>
+                    <span class="px-2 py-1 bg-teal-50 text-teal-700 text-xs font-bold rounded">Dr. INVIVO</span>
+                </div>
+
+                <!-- Tech Card 3 -->
+                <div class="glass-panel p-6 rounded-2xl hover:shadow-xl transition-all duration-300 group">
+                    <div class="text-4xl text-teal-600 mb-4 group-hover:scale-110 transition-transform"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">3. Cold-Plasty Kit</h3>
+                    <p class="text-sm text-slate-500 mb-4">화학 가교제 없는 저온 성형 기술. 세포 생존율을 극대화하여 재생 속도 획기적 단축.</p>
+                    <span class="px-2 py-1 bg-teal-50 text-teal-700 text-xs font-bold rounded">Patented Tech</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2 & 3. 흑자 전환 & 2026 성장 (Financials) -->
+        <section id="financials" class="scroll-mt-24">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <div>
-                    <h2 class="text-3xl font-bold text-slate-800 mb-4">장기 재생의 민주화 <br><span class="text-teal-600">Hyper-Personalized Organ Regeneration</span></h2>
-                    <p class="text-slate-600 leading-relaxed mb-6">
-                        <strong>로킷헬스케어(ROKIT Healthcare)</strong>는 단순한 바이오 3D 프린터 제조사가 아닙니다. 
-                        AI, 바이오잉크, 4D 프린팅 기술을 결합하여 병원 수술실 내에서 즉석으로 환자의 장기(피부, 연골 등)를 재생하는 
-                        <strong>'초개인화 재생 치료 플랫폼'</strong>을 구축하고 있습니다.
+                    <h2 class="text-3xl font-bold text-slate-800 mb-4 flex items-center gap-3">
+                        <span class="w-10 h-10 bg-slate-800 text-white rounded-lg flex items-center justify-center text-lg shadow-md">2</span>
+                        실적 턴어라운드 & 2026 전망
+                    </h2>
+                    <p class="text-slate-600 mb-6 leading-relaxed">
+                        2025년은 <strong>흑자 전환의 원년</strong>입니다. <br>
+                        초기 장비 보급 단계를 지나, 고마진의 소모품(Kit) 매출이 본격화되는 <strong>2026년에는 매출 400억 원 돌파</strong>가 예상됩니다.
                     </p>
-                    <div class="flex gap-4">
-                        <div class="bg-teal-50 px-4 py-3 rounded-lg border-l-4 border-teal-500">
-                            <p class="text-xs text-teal-600 font-bold uppercase">Core Tech</p>
-                            <p class="font-semibold text-slate-800">4D Bioprinting & AI</p>
-                        </div>
-                        <div class="bg-teal-50 px-4 py-3 rounded-lg border-l-4 border-teal-500">
-                            <p class="text-xs text-teal-600 font-bold uppercase">Target</p>
-                            <p class="font-semibold text-slate-800">당뇨발, 골관절염</p>
-                        </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-check text-teal-500 mt-1 mr-3"></i>
+                            <div>
+                                <strong class="text-slate-800 block">2025 Q3 흑자 달성</strong>
+                                <span class="text-sm text-slate-500">상장 직후 분기 흑자(0.7억) 기록, 매출 YoY +173% 급증.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-arrow-trend-up text-teal-500 mt-1 mr-3"></i>
+                            <div>
+                                <strong class="text-slate-800 block">2026년 J-Curve 진입</strong>
+                                <span class="text-sm text-slate-500">미국/유럽 등 선진 시장 매출 본격화로 매출 414억 원 타겟.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="glass-panel p-6 rounded-3xl shadow-lg">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase mb-4 tracking-wider">Revenue Forecast (억 원)</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="revenueChart"></canvas>
                     </div>
                 </div>
-                <div class="bg-slate-50 rounded-xl p-6 border border-slate-200">
-                    <h3 class="text-sm font-bold text-slate-500 uppercase mb-3">Investment Highlight</h3>
-                    <ul class="space-y-3">
-                        <li class="flex items-start">
-                            <span class="flex-shrink-0 h-6 w-6 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-xs font-bold mt-0.5">1</span>
-                            <span class="ml-3 text-slate-700 text-sm"><strong>플랫폼 비즈니스:</strong> 장비 설치 후 소모품(Kit) 매출이 지속 발생하는 구조 (Lock-in 효과).</span>
+            </div>
+        </section>
+
+        <!-- 4. 팔란티어 평행이론 (Comparative Analysis) -->
+        <section id="palantir" class="scroll-mt-24 bg-slate-900 rounded-3xl p-8 md:p-12 text-white relative overflow-hidden">
+            <!-- Background Decoration -->
+            <div class="absolute top-0 right-0 w-64 h-64 bg-teal-500 opacity-10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+
+            <div class="mb-10 relative z-10">
+                <span class="text-teal-400 font-bold text-xs uppercase tracking-widest mb-2 block">Comparative Analysis</span>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Why ROKIT is the 'Palantir' of Bio</h2>
+                <p class="text-slate-300 max-w-2xl text-lg">
+                    팔란티어(PLTR)가 <span class="text-white font-bold">Foundry</span>로 기업의 의사결정 구조를 장악하듯,<br>
+                    로킷은 <span class="text-white font-bold">Dr. INVIVO</span>로 병원의 재생치료 프로세스를 장악합니다.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 relative z-10">
+                <!-- Palantir Side -->
+                <div class="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 hover:border-slate-500 transition">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center"><i class="fa-solid fa-server text-blue-400"></i></div>
+                        <h3 class="text-xl font-bold">Palantir Tech</h3>
+                    </div>
+                    <ul class="space-y-3 text-sm text-slate-300">
+                        <li class="flex justify-between border-b border-slate-700 pb-2">
+                            <span>Core Asset</span>
+                            <span class="text-white font-semibold">Data OS (Foundry)</span>
                         </li>
-                        <li class="flex items-start">
-                            <span class="flex-shrink-0 h-6 w-6 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-xs font-bold mt-0.5">2</span>
-                            <span class="ml-3 text-slate-700 text-sm"><strong>높은 진입 장벽:</strong> 국가별 규제 승인 및 특허 기술로 인한 경쟁사 진입 난이도 상.</span>
+                        <li class="flex justify-between border-b border-slate-700 pb-2">
+                            <span>Lock-in Mechanism</span>
+                            <span class="text-white font-semibold">Workflow Integration</span>
                         </li>
-                        <li class="flex items-start">
-                            <span class="flex-shrink-0 h-6 w-6 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-xs font-bold mt-0.5">3</span>
-                            <span class="ml-3 text-slate-700 text-sm"><strong>글로벌 확장성:</strong> 50여 개국 진출, 기존 치료법 대비 비용/시간 획기적 단축.</span>
+                        <li class="flex justify-between border-b border-slate-700 pb-2">
+                            <span>Revenue Model</span>
+                            <span class="text-white font-semibold">SaaS / Subscription</span>
+                        </li>
+                        <li class="pt-2">
+                            <span class="block text-xs text-slate-500 mb-1">Impact</span>
+                            <span class="text-blue-300">"대체 불가능한 운영체제"</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- ROKIT Side -->
+                <div class="bg-teal-900/40 p-6 rounded-2xl border border-teal-700 hover:border-teal-500 transition relative overflow-hidden">
+                    <div class="absolute inset-0 bg-teal-500/5 pointer-events-none"></div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-teal-800 flex items-center justify-center"><i class="fa-solid fa-dna text-teal-400"></i></div>
+                        <h3 class="text-xl font-bold text-teal-50">ROKIT Healthcare</h3>
+                    </div>
+                    <ul class="space-y-3 text-sm text-teal-100">
+                        <li class="flex justify-between border-b border-teal-800 pb-2">
+                            <span>Core Asset</span>
+                            <span class="text-white font-semibold">Bio Platform (INVIVO)</span>
+                        </li>
+                        <li class="flex justify-between border-b border-teal-800 pb-2">
+                            <span>Lock-in Mechanism</span>
+                            <span class="text-white font-semibold">Surgical Protocol</span>
+                        </li>
+                        <li class="flex justify-between border-b border-teal-800 pb-2">
+                            <span>Revenue Model</span>
+                            <span class="text-white font-semibold">Razor & Blade (Kits)</span>
+                        </li>
+                        <li class="pt-2">
+                            <span class="block text-xs text-teal-400 mb-1">Impact</span>
+                            <span class="text-teal-200">"대체 불가능한 치료 플랫폼"</span>
                         </li>
                     </ul>
                 </div>
             </div>
         </section>
 
-        <!-- Section 2: Business Model (Process Flow) -->
-        <section id="business-model">
-            <div class="mb-6">
-                <h2 class="text-2xl font-bold text-slate-800">비즈니스 프로세스: The Platform</h2>
-                <p class="text-slate-600 mt-2">로킷의 경쟁력은 하드웨어 판매가 아닌, 전체 치료 과정을 표준화한 플랫폼에 있습니다. 아래 단계를 클릭하여 프로세스를 확인하세요.</p>
-            </div>
-
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                <!-- Interactive Stepper -->
-                <div class="flex border-b border-slate-200 overflow-x-auto" id="process-tabs">
-                    <button onclick="updateProcess(0)" class="step-indicator active flex-1 py-4 px-6 text-sm font-bold text-center whitespace-nowrap border-b-2 border-teal-600 hover:bg-slate-50 focus:outline-none transition">
-                        1. AI 진단 (Scan)
-                    </button>
-                    <button onclick="updateProcess(1)" class="step-indicator flex-1 py-4 px-6 text-sm font-bold text-slate-500 text-center whitespace-nowrap border-b-2 border-transparent hover:bg-slate-50 focus:outline-none transition">
-                        2. 바이오 프린팅 (Print)
-                    </button>
-                    <button onclick="updateProcess(2)" class="step-indicator flex-1 py-4 px-6 text-sm font-bold text-slate-500 text-center whitespace-nowrap border-b-2 border-transparent hover:bg-slate-50 focus:outline-none transition">
-                        3. 이식 및 재생 (Heal)
-                    </button>
-                </div>
-
-                <div class="p-8 grid md:grid-cols-2 gap-8 min-h-[300px] items-center">
-                    <div id="process-content-text">
-                        <!-- Dynamic Content will be loaded here -->
-                    </div>
-                    <div class="bg-slate-50 rounded-xl p-6 flex items-center justify-center h-full border border-slate-200">
-                        <div id="process-visual" class="text-center">
-                            <!-- ASCII/CSS Art Placeholder for Visualization -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 3: Comparative Analysis (ROKIT vs Palantir) -->
-        <section id="comparison" class="pt-8">
-            <div class="bg-teal-900 rounded-3xl p-8 md:p-12 text-white">
-                <div class="max-w-3xl mb-10">
-                    <span class="bg-teal-700 text-teal-100 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Comparative Analysis</span>
-                    <h2 class="text-3xl md:text-4xl font-bold mt-4 mb-4">왜 '팔란티어(Palantir)'와 비교하는가?</h2>
-                    <p class="text-teal-100 text-lg leading-relaxed">
-                        사업 아이템(데이터 vs 바이오)은 다르지만, <strong>"성장 방정식(Growth DNA)"</strong>은 놀랍도록 유사합니다. 
-                        두 기업 모두 강력한 플랫폼 락인(Lock-in) 효과와 높은 전환 비용을 기반으로 독점적 지위를 구축합니다.
-                    </p>
-                </div>
-
-                <div class="grid lg:grid-cols-2 gap-12">
-                    <!-- Radar Chart Container -->
-                    <div class="bg-white rounded-2xl p-6 text-slate-900 shadow-xl">
-                        <h3 class="text-lg font-bold mb-4 text-center border-b pb-2">플랫폼 확장성 및 해자(Moat) 비교</h3>
-                        <div class="chart-container">
-                            <canvas id="comparisonChart"></canvas>
-                        </div>
-                        <p class="text-xs text-center text-slate-500 mt-4">* 10점 만점 기준 (자체 분석 추정치)</p>
-                    </div>
-
-                    <!-- Comparison Details -->
-                    <div class="space-y-4">
-                        <!-- Card 1 -->
-                        <div class="bg-teal-800 bg-opacity-50 p-6 rounded-xl border border-teal-700 hover:bg-teal-800 transition cursor-default">
-                            <h4 class="font-bold text-xl text-amber-400 mb-2">1. 락인 (Lock-in) 효과</h4>
-                            <p class="text-sm text-teal-50 mb-3">
-                                <strong>Palantir:</strong> Foundry OS를 도입하면 전체 업무 프로세스가 통합되어 타 소프트웨어로 교체가 불가능에 가까움.
-                            </p>
-                            <div class="border-t border-teal-600 pt-3">
-                                <p class="text-sm text-white">
-                                    <strong>ROKIT:</strong> 병원이 'Dr. INVIVO' 장비를 도입하고 술기를 익히면, 지속적으로 전용 키트(Patch)를 구매해야 함. 의사의 숙련도가 올라갈수록 타 장비 전환 비용 급증.
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Card 2 -->
-                        <div class="bg-teal-800 bg-opacity-50 p-6 rounded-xl border border-teal-700 hover:bg-teal-800 transition cursor-default">
-                            <h4 class="font-bold text-xl text-amber-400 mb-2">2. 초기 침투 난이도 vs 확장성</h4>
-                            <p class="text-sm text-teal-50 mb-3">
-                                <strong>Palantir:</strong> 초기 도입 비용과 컨설팅 기간이 길지만(High Touch), 한 번 정착하면 매출이 폭발적으로 증가(Land & Expand).
-                            </p>
-                            <div class="border-t border-teal-600 pt-3">
-                                <p class="text-sm text-white">
-                                    <strong>ROKIT:</strong> 국가별 의료 규제 허가가 가장 큰 장벽(High Barrier). 하지만 승인 후에는 해당 국가 내 독점적 지위 확보 용이. 글로벌 표준화 성공 시 J-Curve 성장 가능.
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Card 3 -->
-                        <div class="bg-teal-800 bg-opacity-50 p-6 rounded-xl border border-teal-700 hover:bg-teal-800 transition cursor-default">
-                            <h4 class="font-bold text-xl text-amber-400 mb-2">3. 데이터와 AI의 역할</h4>
-                            <p class="text-sm text-teal-50 mb-3">
-                                <strong>Palantir:</strong> 의사결정을 위한 데이터 통합 AI.
-                            </p>
-                            <div class="border-t border-teal-600 pt-3">
-                                <p class="text-sm text-white">
-                                    <strong>ROKIT:</strong> 환부(상처)를 인식하여 최적의 패치 크기와 깊이를 계산하는 '비전 AI'. 데이터가 쌓일수록 재생 성공률이 높아지는 AI 선순환 구조 보유.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 4: Growth Simulation (Financials) -->
-        <section id="growth" class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-8">
-                <div>
-                    <h2 class="text-2xl font-bold text-slate-800">성장 시뮬레이션: J-Curve를 향하여</h2>
-                    <p class="text-slate-600 mt-2 max-w-2xl">
-                        초기에는 장비(Printer) 보급이 매출을 주도하지만, 설치 기반(Installed Base)이 늘어날수록 
-                        고마진의 소모품(Kit) 매출 비중이 급증하는 구조입니다.
-                    </p>
-                </div>
-                <div class="mt-4 md:mt-0 bg-slate-100 p-1 rounded-lg inline-flex">
-                    <button onclick="updateGrowthChart('conservative')" class="growth-btn active px-4 py-2 text-xs font-bold rounded-md transition text-white bg-teal-600 shadow-sm" data-mode="conservative">보수적 관점</button>
-                    <button onclick="updateGrowthChart('optimistic')" class="growth-btn px-4 py-2 text-xs font-bold rounded-md transition text-slate-500 hover:text-slate-800" data-mode="optimistic">낙관적 관점</button>
-                </div>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="md:col-span-2">
-                    <div class="chart-container" style="height: 350px;">
-                        <canvas id="growthChart"></canvas>
-                    </div>
-                </div>
-                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 flex flex-col justify-center">
-                    <h4 class="font-bold text-slate-800 mb-4">핵심 성장 지표 (KPI)</h4>
-                    <div class="space-y-6">
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="text-slate-600">진출 국가 수</span>
-                                <span class="font-bold text-teal-700">~50개국+</span>
-                            </div>
-                            <div class="w-full bg-slate-200 rounded-full h-2">
-                                <div class="bg-teal-500 h-2 rounded-full" style="width: 70%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="text-slate-600">소모품 매출 비중</span>
-                                <span class="font-bold text-amber-600" id="consumable-ratio">상승세</span>
-                            </div>
-                            <div class="w-full bg-slate-200 rounded-full h-2">
-                                <div class="bg-amber-500 h-2 rounded-full" style="width: 45%"></div>
-                            </div>
-                            <p class="text-xs text-slate-400 mt-2">소모품 비중이 높을수록 영업이익률 개선</p>
-                        </div>
-                        <div class="pt-4 border-t border-slate-200">
-                            <p class="text-sm text-slate-700">
-                                <strong>Insight:</strong> 로킷의 미래 가치는 단순 장비 판매량이 아닌, 
-                                <span class="bg-yellow-100 px-1">장비당 연간 키트 소모량(Utilization Rate)</span>에 달려 있습니다.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 5: Risk & Conclusion -->
-        <section class="grid md:grid-cols-2 gap-8">
-            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
-                <h3 class="font-bold text-lg text-red-600 mb-4 flex items-center">
-                    <span class="mr-2">⚠️</span> Risk Factors
-                </h3>
-                <ul class="space-y-3 text-sm text-slate-600">
-                    <li class="flex items-start">
-                        <span class="text-red-400 mr-2">•</span>
-                        규제 리스크: 각 국가별 의료기기 승인 지연 가능성.
-                    </li>
-                    <li class="flex items-start">
-                        <span class="text-red-400 mr-2">•</span>
-                        의료계의 보수성: 새로운 시술법(재생치료) 도입에 대한 의사들의 저항.
-                    </li>
-                    <li class="flex items-start">
-                        <span class="text-red-400 mr-2">•</span>
-                        수가 적용: 건강보험 급여 적용 여부가 대중화의 속도를 결정.
-                    </li>
-                </ul>
-            </div>
-            <div class="bg-teal-50 p-8 rounded-2xl border border-teal-100">
-                <h3 class="font-bold text-lg text-teal-800 mb-4 flex items-center">
-                    <span class="mr-2">🚀</span> Final Verdict: Scalability
-                </h3>
-                <p class="text-sm text-teal-900 leading-relaxed">
-                    로킷헬스케어는 <strong>"하드웨어를 미끼로 한 소프트웨어(바이오) 기업"</strong>의 성격을 띱니다. 
-                    팔란티어가 데이터 운영체제를 통해 고객을 락인하듯, 로킷은 수술실 내 재생 플랫폼을 통해 병원을 락인할 잠재력이 있습니다. 
-                    <br><br>
-                    성공적인 IPO와 글로벌 표준 치료법 등재가 이루어진다면, 
-                    단순 제조사를 넘어 <strong>글로벌 헬스케어 플랫폼</strong>으로서의 밸류에이션(Valuation) 재평가가 가능할 것입니다.
+        <!-- 5. Vision 2030 (Guidance) -->
+        <section id="vision2030" class="scroll-mt-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Vision 2030: The Roadmap</h2>
+                <p class="text-slate-600">
+                    2027년까지 72개국 진출(Target)을 달성하고, <br>2030년에는 <strong>피부를 넘어 장기(신장, 간) 재생의 글로벌 표준</strong>이 되는 것이 목표입니다.
                 </p>
             </div>
+
+            <div class="relative">
+                <!-- Timeline Line -->
+                <div class="absolute left-1/2 w-0.5 h-full bg-slate-200 -translate-x-1/2 hidden md:block"></div>
+
+                <!-- Phase 1 -->
+                <div class="flex flex-col md:flex-row justify-between items-center mb-12 group">
+                    <div class="w-full md:w-5/12 text-right pr-8 mb-4 md:mb-0">
+                        <h3 class="text-2xl font-bold text-slate-800 group-hover:text-teal-600 transition">Phase 1: Foundation</h3>
+                        <p class="text-sm text-slate-500 font-semibold mb-2">2024 ~ 2025</p>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            당뇨발(DFU) 치료 플랫폼 상용화.<br>
+                            IPO 성공 및 흑자 전환 달성.<br>
+                            진출 국가 40개국 확보.
+                        </p>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-teal-600 border-4 border-white shadow-lg z-10 hidden md:block group-hover:scale-125 transition-transform"></div>
+                    <div class="w-full md:w-5/12 pl-8">
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                            <span class="text-xs font-bold text-teal-600 bg-teal-50 px-2 py-1 rounded">Target: Skin & DFU</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 2 -->
+                <div class="flex flex-col md:flex-row justify-between items-center mb-12 group">
+                    <div class="w-full md:w-5/12 text-right pr-8 md:order-1 mb-4 md:mb-0">
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                            <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded">Target: Cartilage (연골)</span>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-slate-300 border-4 border-white shadow-lg z-10 hidden md:block group-hover:bg-amber-500 transition-colors md:order-2"></div>
+                    <div class="w-full md:w-5/12 pl-8 md:order-3">
+                        <h3 class="text-2xl font-bold text-slate-800 group-hover:text-amber-600 transition">Phase 2: Expansion</h3>
+                        <p class="text-sm text-slate-500 font-semibold mb-2">2026 ~ 2027</p>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            골관절염(OA) 치료 시장 진입.<br>
+                            매출 655억 원 달성 목표.<br>
+                            글로벌 72개국 네트워크 구축.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Phase 3 -->
+                <div class="flex flex-col md:flex-row justify-between items-center group">
+                    <div class="w-full md:w-5/12 text-right pr-8 mb-4 md:mb-0">
+                        <h3 class="text-2xl font-bold text-slate-800 group-hover:text-indigo-600 transition">Phase 3: Revolution</h3>
+                        <p class="text-sm text-slate-500 font-semibold mb-2">2028 ~ 2030</p>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            만성 신부전(Kidney) 등 내부 장기 재생.<br>
+                            항노화(Anti-aging) 플랫폼 확장.<br>
+                            바이오 헬스케어 글로벌 Top-Tier 도약.
+                        </p>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-slate-300 border-4 border-white shadow-lg z-10 hidden md:block group-hover:bg-indigo-600 transition-colors"></div>
+                    <div class="w-full md:w-5/12 pl-8">
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                            <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded">Target: Complex Organs</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <footer class="text-center text-slate-400 text-xs py-8">
-            <p>본 자료는 분석용 시뮬레이션이며, 실제 투자 권유가 아닙니다. <br>Data Source: Public Reports & Analysis Logic</p>
-        </footer>
+        <!-- 6. 투자 포인트 (Investment Thesis) -->
+        <section id="invest" class="scroll-mt-24">
+            <h2 class="text-3xl font-bold text-slate-800 mb-8 text-center">Why Invest Now?</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Point 1 -->
+                <div class="bg-teal-700 text-white p-8 rounded-2xl hover:-translate-y-2 transition duration-300 shadow-xl shadow-teal-700/20">
+                    <div class="text-3xl mb-4"><i class="fa-solid fa-trophy"></i></div>
+                    <h3 class="text-xl font-bold mb-3">1. First Mover Advantage</h3>
+                    <p class="text-teal-100 text-sm leading-relaxed">
+                        세계 최초로 'AI + 바이오프린팅' 장기 재생 기술을 상용화했습니다. 
+                        이미 46개국에 진입하여 글로벌 규제 장벽(Regulatory Moat)을 구축했습니다.
+                    </p>
+                </div>
+
+                <!-- Point 2 -->
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 hover:-translate-y-2 transition duration-300 shadow-lg group">
+                    <div class="text-3xl mb-4 text-slate-700 group-hover:text-amber-500 transition"><i class="fa-solid fa-chart-line"></i></div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-3">2. Proven Profitability</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        많은 바이오 기업이 만년 적자에 시달리는 것과 달리, 로킷은 2025년 흑자 전환에 성공하며 
+                        <strong>'돈 버는 바이오'</strong>임을 입증했습니다.
+                    </p>
+                </div>
+
+                <!-- Point 3 -->
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 hover:-translate-y-2 transition duration-300 shadow-lg group">
+                    <div class="text-3xl mb-4 text-slate-700 group-hover:text-indigo-500 transition"><i class="fa-solid fa-layer-group"></i></div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-3">3. Scalable Platform</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        하드웨어(프린터) 설치가 늘어날수록 소모품(키트) 매출이 누적되는 구조입니다. 
+                        시간이 갈수록 이익률이 개선되는 <strong>플랫폼 비즈니스</strong>의 전형입니다.
+                    </p>
+                </div>
+            </div>
+        </section>
 
     </main>
 
-    <!-- JavaScript Logic -->
+    <footer class="bg-slate-50 border-t border-slate-200 py-12 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-2xl font-black text-slate-300 mb-4">ROKIT<span class="font-light">INSIGHT</span></h2>
+            <p class="text-slate-400 text-sm mb-8 max-w-lg mx-auto">
+                본 리포트는 로킷헬스케어의 공개된 IR 자료 및 시장 전망치를 기반으로 작성되었습니다.<br>
+                투자에 대한 책임은 투자자 본인에게 있습니다.
+            </p>
+            <div class="flex justify-center gap-4 text-slate-400">
+                <a href="#" class="hover:text-teal-600"><i class="fa-brands fa-github"></i></a>
+                <a href="#" class="hover:text-teal-600"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#" class="hover:text-teal-600"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Charts -->
     <script>
-        // --- 1. Process Stepper Logic ---
-        const processData = [
-            {
-                title: "STEP 1: AI 진단 (Scan)",
-                desc: "환자의 환부(당뇨발 등)를 촬영하면, AI가 상처의 크기, 깊이, 모양을 3차원으로 정밀 분석합니다. 이 데이터를 기반으로 개인 맞춤형 재생 패치(Patch) 디자인을 생성합니다.",
-                highlight: "Key Tech: Computer Vision & AI Modeling",
-                visual: `<div class="text-6xl mb-4">📸 ➡️ 🧠</div><div class="font-bold text-teal-600">Patient Scan & AI Analysis</div>`
-            },
-            {
-                title: "STEP 2: 4D 바이오 프린팅 (Print)",
-                desc: "닥터 인비보(Dr. INVIVO) 프린터가 환자의 지방 조직 등을 활용한 '바이오 잉크'를 사용하여, 분석된 모양 그대로 맞춤형 패치를 출력합니다. 수술실 내에서 15~30분 내에 완료됩니다.",
-                highlight: "Key Tech: 4D Bioprinting & Temperature Control",
-                visual: `<div class="text-6xl mb-4">🖨️ ➡️ 🧬</div><div class="font-bold text-teal-600">In-Hospital Bio-Printing</div>`
-            },
-            {
-                title: "STEP 3: 이식 및 재생 (Heal)",
-                desc: "출력된 패치를 환부에 부착합니다. 패치는 피부 세포의 성장을 돕는 지지체(Scaffold) 역할을 하며, 시간이 지나면 환자의 피부와 일체화되어 자연스럽게 재생됩니다.",
-                highlight: "Outcome: 90%+ Regeneration Rate (Clinical Data)",
-                visual: `<div class="text-6xl mb-4">🩹 ➡️ ✨</div><div class="font-bold text-teal-600">Implantation & Regeneration</div>`
-            }
-        ];
-
-        function updateProcess(index) {
-            // Update Buttons
-            const buttons = document.querySelectorAll('.step-indicator');
-            buttons.forEach((btn, i) => {
-                if(i === index) {
-                    btn.classList.add('active', 'border-teal-600', 'text-teal-800');
-                    btn.classList.remove('text-slate-500', 'border-transparent');
-                } else {
-                    btn.classList.remove('active', 'border-teal-600', 'text-teal-800');
-                    btn.classList.add('text-slate-500', 'border-transparent');
-                }
-            });
-
-            // Update Content
-            const contentDiv = document.getElementById('process-content-text');
-            const visualDiv = document.getElementById('process-visual');
-            
-            contentDiv.innerHTML = `
-                <h3 class="text-2xl font-bold text-teal-700 mb-3">${processData[index].title}</h3>
-                <p class="text-slate-700 text-lg mb-6 leading-relaxed">${processData[index].desc}</p>
-                <div class="inline-block bg-amber-100 text-amber-800 px-3 py-1 rounded text-sm font-semibold">
-                    ${processData[index].highlight}
-                </div>
-            `;
-            
-            visualDiv.innerHTML = processData[index].visual;
-        }
-
-        // Initialize Process Section
-        updateProcess(0);
-
-
-        // --- 2. Chart Configurations ---
+        // Financial Chart Configuration
+        const ctx = document.getElementById('revenueChart').getContext('2d');
         
-        // Common Options
-        Chart.defaults.font.family = "'Noto Sans KR', sans-serif";
-        Chart.defaults.color = '#64748b';
-
-        // A. Radar Chart (Comparison)
-        const radarCtx = document.getElementById('comparisonChart').getContext('2d');
-        const radarChart = new Chart(radarCtx, {
-            type: 'radar',
+        // Data derived from search results and projections
+        const years = ['2023', '2024', '2025(E)', '2026(E)', '2027(Target)'];
+        const revenues = [124, 131, 238, 414, 655]; // Unit: 100 Million KRW
+        
+        new Chart(ctx, {
+            type: 'bar',
             data: {
-                labels: ['기술 진입장벽', '고객 락인(Lock-in)', '글로벌 확장성', '규제 리스크', '반복 매출 비중', 'AI 의존도'],
+                labels: years,
                 datasets: [{
-                    label: 'Palantir (Data OS)',
-                    data: [8, 10, 9, 4, 9, 10],
-                    fill: true,
-                    backgroundColor: 'rgba(217, 119, 6, 0.2)', // Amber
-                    borderColor: 'rgba(217, 119, 6, 1)',
-                    pointBackgroundColor: 'rgba(217, 119, 6, 1)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgba(217, 119, 6, 1)'
-                }, {
-                    label: 'ROKIT (Bio Platform)',
-                    data: [9, 8, 7, 9, 7, 6], // 규제 리스크가 높음(점수가 높을수록 리스크 큼 or 장벽 높음) -> 여기서는 '장점' 위주로 해석: 장벽이 높다(Good), 규제 리스크가 크다(Bad). Let's standardize: Higher is Stronger/Higher Intensity.
-                    // Adjusted interpretation: 
-                    // 기술장벽: 9 (High), 락인: 8 (High potential), 확장성: 7 (Growing), 규제난이도: 9 (Very Hard - Barrier for others), 반복매출: 7 (Rising), AI: 6 (Growing)
-                    fill: true,
-                    backgroundColor: 'rgba(15, 118, 110, 0.2)', // Teal
-                    borderColor: 'rgba(15, 118, 110, 1)',
-                    pointBackgroundColor: 'rgba(15, 118, 110, 1)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgba(15, 118, 110, 1)'
+                    label: '매출액 (억 원)',
+                    data: revenues,
+                    backgroundColor: [
+                        '#cbd5e1', // 2023 (Slate 300)
+                        '#94a3b8', // 2024 (Slate 400)
+                        '#2dd4bf', // 2025 (Teal 400) - Turnaround Point
+                        '#0d9488', // 2026 (Teal 600)
+                        '#f59e0b'  // 2027 (Amber 500) - Target
+                    ],
+                    borderRadius: 8,
+                    borderSkipped: false,
+                    barPercentage: 0.6,
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                scales: {
-                    r: {
-                        angleLines: { color: '#e2e8f0' },
-                        grid: { color: '#e2e8f0' },
-                        pointLabels: {
-                            font: { size: 12, weight: 'bold' },
-                            color: '#1e293b'
-                        },
-                        suggestedMin: 0,
-                        suggestedMax: 10
-                    }
-                },
                 plugins: {
-                    legend: { position: 'bottom' },
+                    legend: {
+                        display: false
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                return context.dataset.label + ': ' + context.raw + '/10';
+                                return context.raw + ' 억 원';
+                            }
+                        },
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        padding: 12,
+                        cornerRadius: 8,
+                    },
+                    annotation: {
+                        annotations: {
+                            line1: {
+                                type: 'line',
+                                xMin: 1.5,
+                                xMax: 1.5,
+                                borderColor: '#0f766e',
+                                borderWidth: 2,
+                                borderDash: [5, 5],
+                                label: {
+                                    display: true,
+                                    content: 'Turnaround',
+                                    position: 'start',
+                                    backgroundColor: '#0f766e',
+                                    color: 'white',
+                                    font: { size: 10, weight: 'bold' },
+                                    padding: 6,
+                                    yAdjust: -20
+                                }
                             }
                         }
                     }
-                }
-            }
-        });
-
-        // B. Growth Chart (Stacked Bar)
-        const growthCtx = document.getElementById('growthChart').getContext('2d');
-        
-        // Data Scenarios
-        const scenarios = {
-            conservative: {
-                years: ['2024(E)', '2025(E)', '2026(E)', '2027(E)', '2028(E)'],
-                device: [30, 40, 45, 50, 55],
-                consumables: [10, 20, 35, 55, 80] // Gradual growth
-            },
-            optimistic: {
-                years: ['2024(E)', '2025(E)', '2026(E)', '2027(E)', '2028(E)'],
-                device: [35, 50, 65, 80, 90], // Faster roll-out
-                consumables: [15, 35, 70, 120, 200] // Exponential kit usage (J-Curve)
-            }
-        };
-
-        let currentScenario = 'conservative';
-
-        const growthChart = new Chart(growthCtx, {
-            type: 'bar',
-            data: {
-                labels: scenarios.conservative.years,
-                datasets: [
-                    {
-                        label: 'Device (Printer) Revenue',
-                        data: scenarios.conservative.device,
-                        backgroundColor: '#cbd5e1', // Slate 300
-                        stack: 'Stack 0',
-                    },
-                    {
-                        label: 'Consumables (Kit/Service) Revenue',
-                        data: scenarios.conservative.consumables,
-                        backgroundColor: '#0f766e', // Teal 700
-                        stack: 'Stack 0',
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false,
-                    },
-                    legend: { position: 'top' },
-                    title: {
-                        display: true,
-                        text: '매출 구성 변화 시뮬레이션 (단위: 십억 원 / 임의 추정)',
-                        font: { size: 14 }
-                    }
                 },
                 scales: {
-                    x: { stacked: true, grid: { display: false } },
-                    y: { 
-                        stacked: true, 
-                        grid: { borderDash: [2, 4] },
-                        beginAtZero: true 
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#f1f5f9',
+                            borderDash: [5, 5]
+                        },
+                        ticks: {
+                            font: { family: 'Pretendard' }
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { family: 'Pretendard', weight: '600' }
+                        }
                     }
+                },
+                animation: {
+                    duration: 2000,
+                    easing: 'easeOutQuart'
                 }
             }
         });
-
-        function updateGrowthChart(mode) {
-            currentScenario = mode;
-            
-            // Update Buttons
-            document.querySelectorAll('.growth-btn').forEach(btn => {
-                if(btn.dataset.mode === mode) {
-                    btn.classList.add('bg-teal-600', 'text-white', 'shadow-sm');
-                    btn.classList.remove('text-slate-500', 'hover:text-slate-800');
-                } else {
-                    btn.classList.remove('bg-teal-600', 'text-white', 'shadow-sm');
-                    btn.classList.add('text-slate-500', 'hover:text-slate-800');
-                }
-            });
-
-            // Update Chart Data
-            growthChart.data.labels = scenarios[mode].years;
-            growthChart.data.datasets[0].data = scenarios[mode].device;
-            growthChart.data.datasets[1].data = scenarios[mode].consumables;
-            growthChart.update();
-
-            // Update Text Indicator
-            const ratioText = document.getElementById('consumable-ratio');
-            if(mode === 'optimistic') {
-                ratioText.textContent = "급격한 상승 (J-Curve)";
-                ratioText.className = "font-bold text-red-600";
-            } else {
-                ratioText.textContent = "안정적 상승";
-                ratioText.className = "font-bold text-amber-600";
-            }
-        }
-
     </script>
 </body>
 </html>
