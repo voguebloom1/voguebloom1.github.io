@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>엔비디아 & 인텔: 전략적 동맹 분석 리포트</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f8fafc; }
+        .chart-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 100%; 
+            height: 300px; 
+        }
+        .active-tab { border-bottom: 2px solid #76B900; color: #1a202c; font-weight: 700; }
+        .tab-btn { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+    </style>
+    <!-- Chosen Palette: Tech Synergy (Intel Blue #0071C5, Nvidia Green #76B900, Warm Neutral Backgrounds) -->
+    <!-- Application Structure Plan: Dashboard layout focused on 3 pillars: Market Structure (Equity), Roadmap (Time/Tech), and Synergy (Architecture). Top-down flow from 'The Deal' to 'Technical Execution'. Interactive tabs for deep dives into phases. -->
+    <!-- Visualization & Content Choices: 
+         1. Shareholder Structure -> Doughnut Chart -> Visualizes the equity landscape and Nvidia's entry point.
+         2. Roadmap -> Interactive Step Cards -> Users click Phase 1/2 to see technical details (NVLINK vs Packaging).
+         3. Tech Stack -> Comparative Grid -> Highlights the shift from ARM to x86/RTX SOC.
+         4. Synergy -> Dynamic Text/Gauge -> "Better than Vera Rubin" conceptual impact.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="text-slate-800">
+
+    <!-- Header / Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-slate-800 rounded flex items-center justify-center text-white font-bold">R</div>
+                    <h1 class="text-xl font-bold tracking-tight text-slate-900">Market<span class="text-[#76B900]">Report</span>: 엔비디아 & 인텔 동맹</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="scrollToSection('summary')" class="tab-btn text-sm font-medium text-slate-500 hover:text-slate-900 px-3 py-2">개요</button>
+                    <button onclick="scrollToSection('equity')" class="tab-btn text-sm font-medium text-slate-500 hover:text-slate-900 px-3 py-2">지분 구조</button>
+                    <button onclick="scrollToSection('roadmap')" class="tab-btn text-sm font-medium text-slate-500 hover:text-slate-900 px-3 py-2">로드맵</button>
+                    <button onclick="scrollToSection('tech')" class="tab-btn text-sm font-medium text-slate-500 hover:text-slate-900 px-3 py-2">기술 시너지</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+        <!-- Section 1: Executive Summary -->
+        <section id="summary" class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
+            <div class="flex flex-col md:flex-row gap-8 items-start">
+                <div class="flex-1 space-y-4">
+                    <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        Deal Analysis
+                    </div>
+                    <h2 class="text-3xl font-bold text-slate-900">젠슨 황의 계산: <span class="text-[#0071C5]">ASIC 방어</span>와 <span class="text-[#76B900]">완성형 AI 가속기</span></h2>
+                    <p class="text-lg text-slate-600 leading-relaxed">
+                        엔비디아가 인텔에 대한 전략적 지분 투자를 단행하며, 단순한 협력을 넘어선 '기술 동맹'을 구축했습니다. 
+                        이는 베라루빈(Vera Rubin) 아키텍처를 뛰어넘는 강력한 완성형 AI 가속기를 위한 포석이자, 
+                        커스텀 칩(ASIC) 시장의 확장에 대응하는 견고한 방어 전략입니다.
+                    </p>
+                    <div class="grid grid-cols-2 gap-4 mt-6">
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                            <div class="text-sm text-slate-500 mb-1">인수/투자 키워드</div>
+                            <div class="text-2xl font-bold text-slate-800">$50 <span class="text-sm font-normal text-slate-500">Target/Deal</span></div>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                            <div class="text-sm text-slate-500 mb-1">핵심 전략</div>
+                            <div class="text-xl font-bold text-slate-800">IP 자산 공유</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/3 bg-slate-900 rounded-xl p-6 text-white flex flex-col justify-between min-h-[250px]">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2 text-[#76B900]">전략적 목표</h3>
+                        <ul class="space-y-3 text-sm text-slate-300">
+                            <li class="flex items-start gap-2">
+                                <span class="text-[#76B900] mt-1">●</span>
+                                <span>ARM 의존도 탈피 및 x86 기반 추론 시장 장악</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-[#76B900] mt-1">●</span>
+                                <span>미국 내 최신 파운드리(인텔) 확보로 공급망 안정</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-[#76B900] mt-1">●</span>
+                                <span>엔비디아 GPU + 인텔 CPU 통합 '슈퍼칩' 구현</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-700">
+                        <div class="text-xs text-slate-400">Status</div>
+                        <div class="font-medium text-green-400">연구개발 및 지분투자 개시</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Shareholder Structure (Interactive Chart) -->
+        <section id="equity" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="md:col-span-1 bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                <h3 class="text-xl font-bold text-slate-900 mb-2">인텔 주요 주주 구성</h3>
+                <p class="text-sm text-slate-500 mb-6">
+                    이 차트는 현재 인텔의 지분 구조와 엔비디아의 초기 진입 위치를 보여줍니다. 
+                    엔비디아는 연구개발 목적의 4% 지분으로 시작하여 영향력을 확대하고 있습니다.
+                </p>
+                <div class="chart-container mx-auto">
+                    <canvas id="shareholderChart"></canvas>
+                </div>
+                <div class="mt-4 text-center">
+                    <p class="text-xs text-slate-400">차트 영역을 클릭하거나 호버하여 상세 정보를 확인하세요.</p>
+                </div>
+            </div>
+
+            <div class="md:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col justify-center">
+                <h3 class="text-xl font-bold text-slate-900 mb-4">지분 구조의 시사점</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="p-4 rounded-xl bg-blue-50 border border-blue-100 cursor-pointer card-hover" onclick="highlightSegment(0)">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-blue-900">기관 투자자 (16%)</span>
+                            <span class="w-3 h-3 rounded-full bg-blue-600"></span>
+                        </div>
+                        <p class="text-sm text-blue-800">뱅가드와 블랙록이 각각 약 8%씩 보유. 시장의 안정적인 지지를 의미합니다.</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-red-50 border border-red-100 cursor-pointer card-hover" onclick="highlightSegment(1)">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-red-900">미국 정부 (10%)</span>
+                            <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                        </div>
+                        <p class="text-sm text-red-800">반도체 지원법 및 안보 자산으로서의 인텔을 보호하는 핵심 지분입니다.</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-green-50 border border-green-100 cursor-pointer card-hover" onclick="highlightSegment(2)">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-green-900">엔비디아 (4%)</span>
+                            <span class="w-3 h-3 rounded-full bg-[#76B900]"></span>
+                        </div>
+                        <p class="text-sm text-green-800">연구 개발 협력을 위한 전략적 교두보 확보. 단순 투자가 아닌 R&D 파트너십의 시작.</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-gray-50 border border-gray-100 cursor-pointer card-hover" onclick="highlightSegment(3)">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-bold text-gray-900">고든 무어 (3~4%)</span>
+                            <span class="w-3 h-3 rounded-full bg-gray-400"></span>
+                        </div>
+                        <p class="text-sm text-gray-700">설립자의 유산과 상징적 지분.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Integration Roadmap -->
+        <section id="roadmap" class="bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
+            <h3 class="text-2xl font-bold text-slate-900 mb-6">기술 통합 로드맵: 단계별 전략</h3>
+            <p class="text-slate-600 mb-8">
+                엔비디아와 인텔의 협력은 단순한 부품 공급을 넘어 아키텍처의 통합으로 나아갑니다. 
+                아래 단계를 클릭하여 기술적 세부 사항을 확인하세요.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative">
+                <!-- Connecting Line (Visual only for desktop) -->
+                <div class="hidden md:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-1 bg-slate-200 z-0"></div>
+
+                <!-- Phase 1 Card -->
+                <div id="phase1-card" class="relative z-10 bg-white border-2 border-[#76B900] rounded-xl p-6 cursor-pointer transition-all duration-300 shadow-lg" onclick="showPhaseDetail(1)">
+                    <div class="absolute -top-3 left-6 bg-[#76B900] text-white px-3 py-1 text-xs font-bold rounded-full">STEP 1</div>
+                    <h4 class="text-lg font-bold text-slate-900 mt-2 mb-2">연결성 확보 (Connectivity)</h4>
+                    <p class="text-slate-600 text-sm mb-4">NVLINK 지원 및 초기 파운드리 협력</p>
+                    <ul class="space-y-2 text-sm text-slate-500">
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>인텔 CPU의 NVLINK 공식 지원</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>미국 내 인텔 파운드리 활용 (노트북 PC용)</li>
+                    </ul>
+                    <div class="mt-4 text-right text-[#76B900] text-sm font-medium group-hover:underline">자세히 보기 →</div>
+                </div>
+
+                <!-- Phase 2 Card -->
+                <div id="phase2-card" class="relative z-10 bg-white border border-slate-200 rounded-xl p-6 cursor-pointer transition-all duration-300 hover:border-[#0071C5] hover:shadow-lg" onclick="showPhaseDetail(2)">
+                    <div class="absolute -top-3 left-6 bg-slate-200 text-slate-600 px-3 py-1 text-xs font-bold rounded-full">STEP 2</div>
+                    <h4 class="text-lg font-bold text-slate-900 mt-2 mb-2">완전 통합 (Full Integration)</h4>
+                    <p class="text-slate-600 text-sm mb-4">패키지 레벨 통합 및 SOC 구조화</p>
+                    <ul class="space-y-2 text-sm text-slate-500">
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>인텔 CPU + 엔비디아 RTX SOC 패키징</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>유리기판 기반 CPO(Co-Packaged Optics) 적용</li>
+                    </ul>
+                    <div class="mt-4 text-right text-[#0071C5] text-sm font-medium group-hover:underline">자세히 보기 →</div>
+                </div>
+            </div>
+
+            <!-- Dynamic Detail View -->
+            <div id="phase-detail" class="mt-8 bg-slate-50 rounded-xl p-6 border border-slate-200 transition-all duration-500 overflow-hidden">
+                <div class="flex items-start gap-4">
+                    <div class="p-3 bg-white rounded-lg shadow-sm text-2xl" id="detail-icon">🔗</div>
+                    <div>
+                        <h5 class="text-lg font-bold text-slate-900" id="detail-title">Phase 1: NVLINK & Foundry Ecosystem</h5>
+                        <p class="text-slate-600 text-sm mt-2 leading-relaxed" id="detail-desc">
+                            1단계에서는 엔비디아의 고속 인터커넥트 기술인 NVLINK를 인텔 CPU가 기본 지원하도록 하여, 
+                            데이터 전송 병목을 해소합니다. 동시에 엔비디아는 인텔의 미국 내 최신 파운드리 라인을 활용하여 
+                            노트북 등 컨슈머용 PC 칩셋 생산을 시작, 공급망 리스크를 분산합니다.
+                        </p>
+                        <div class="mt-4 flex gap-2" id="detail-tags">
+                            <span class="px-2 py-1 bg-white border border-slate-200 rounded text-xs font-medium text-slate-600">NVLINK</span>
+                            <span class="px-2 py-1 bg-white border border-slate-200 rounded text-xs font-medium text-slate-600">US Foundry</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Technology Synergy & Architecture -->
+        <section id="tech" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                <h3 class="text-xl font-bold text-slate-900 mb-4">아키텍처 대전환: ARM vs x86</h3>
+                <p class="text-sm text-slate-500 mb-6">
+                    엔비디아는 기존 ARM 기반 전략에서 선회하여, 인텔 x86 아키텍처의 강력한 성능을 추론(Inference) 영역에 활용하려 합니다.
+                    이것이 "X86의 진가"가 발휘되는 지점입니다.
+                </p>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                        <span class="text-sm font-medium text-slate-600">기존 전략 (ARM)</span>
+                        <div class="w-1/2 bg-slate-200 rounded-full h-2">
+                            <div class="bg-slate-400 h-2 rounded-full" style="width: 60%"></div>
+                        </div>
+                        <span class="text-xs text-slate-500">저전력 중심</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-100">
+                        <span class="text-sm font-bold text-blue-900">신규 전략 (x86 + RTX)</span>
+                        <div class="w-1/2 bg-slate-200 rounded-full h-2">
+                            <div class="bg-blue-600 h-2 rounded-full" style="width: 95%"></div>
+                        </div>
+                        <span class="text-xs font-bold text-blue-700">고성능 추론 최적화</span>
+                    </div>
+                </div>
+
+                <div class="mt-6 grid grid-cols-2 gap-4">
+                    <div class="bg-white p-4 rounded-lg border border-slate-200 text-center">
+                        <div class="text-2xl mb-2">🧩</div>
+                        <div class="font-bold text-slate-800 text-sm">Advanced Packaging</div>
+                        <div class="text-xs text-slate-500 mt-1">칩 간 초고속 연결</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg border border-slate-200 text-center">
+                        <div class="text-2xl mb-2">💎</div>
+                        <div class="font-bold text-slate-800 text-sm">Glass Substrate</div>
+                        <div class="text-xs text-slate-500 mt-1">유리기판 신소재 적용</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col">
+                <h3 class="text-xl font-bold text-slate-900 mb-2">베라루빈(Vera Rubin)을 넘어서</h3>
+                <p class="text-sm text-slate-500 mb-6">
+                    차세대 아키텍처 '베라루빈'보다 더 강력한 완성형 가속기. 
+                    인텔의 CPU와 엔비디아의 GPU가 하나의 SOC로 통합되어 ASIC(주문형 반도체) 경쟁자들을 방어합니다.
+                </p>
+                
+                <div class="flex-1 flex flex-col justify-center items-center bg-slate-900 rounded-xl p-8 relative overflow-hidden group">
+                    <!-- Conceptual Visual using CSS -->
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-900/50 to-green-900/50 opacity-50"></div>
+                    
+                    <div class="z-10 text-center space-y-4">
+                        <div class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#0071C5] to-[#76B900]">
+                            HYPER-SOC
+                        </div>
+                        <div class="text-white font-medium">Intel CPU + Nvidia GPU</div>
+                        <div class="inline-block px-4 py-1 bg-white/10 backdrop-blur rounded-full text-xs text-green-300 border border-green-500/30">
+                            ASIC Defense Strategy
+                        </div>
+                    </div>
+
+                    <!-- Animated elements for "Interaction" feel -->
+                    <div class="absolute bottom-4 w-full px-8">
+                        <div class="flex justify-between text-xs text-slate-400 mb-1">
+                            <span>Integration Level</span>
+                            <span id="integration-level-text">Running...</span>
+                        </div>
+                        <div class="w-full bg-slate-700 rounded-full h-1">
+                            <div id="integration-bar" class="bg-gradient-to-r from-blue-500 to-green-500 h-1 rounded-full transition-all duration-1000" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 mt-12 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-slate-400 text-sm">
+            <p>&copy; 2025 Market Report. Based on provided analysis data regarding Nvidia & Intel strategic partnership.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Data for Charts & State
+        const shareData = {
+            labels: ['미국 정부 (10%)', '뱅가드/블랙록 (16%)', '엔비디아 (4%)', '고든 무어 (3~4%)', '기타 (66%)'],
+            datasets: [{
+                data: [10, 16, 4, 4, 66],
+                backgroundColor: [
+                    '#EF4444', // Red for Gov
+                    '#2563EB', // Blue for Vanguard
+                    '#76B900', // Nvidia Green
+                    '#9CA3AF', // Grey for Moore
+                    '#E2E8F0'  // Light Grey for Others
+                ],
+                borderWidth: 0,
+                hoverOffset: 10
+            }]
+        };
+
+        const phaseDetails = {
+            1: {
+                title: "1단계: 연결성 확보 (Connectivity)",
+                desc: "엔비디아 GPU와 인텔 CPU 간의 초고속 데이터 통신을 위한 NVLINK 지원이 핵심입니다. 또한, 미국 내 반도체 공급망 안정을 위해 인텔의 최신 파운드리 공정을 활용하여 엔비디아의 노트북용 GPU 및 칩셋 생산을 시작합니다. 이는 상호 신뢰 구축의 첫 단계입니다.",
+                tags: ["NVLINK", "US Foundry", "Notebook PC"],
+                icon: "🔗",
+                colorClass: "border-[#76B900]"
+            },
+            2: {
+                title: "2단계: 완전 통합 (Full Integration)",
+                desc: "단순 연결을 넘어, 하나의 패키지 안에 CPU와 GPU를 통합하는 단계입니다. 어드밴스드 패키징(Advanced Packaging) 기술과 유리기판(Glass Substrate)을 활용하여 전력 효율을 극대화하고, CPO(Co-Packaged Optics) 기술로 데이터 전송 속도를 획기적으로 높입니다. 이를 통해 ARM 진영의 도전을 무력화하는 '완성형 AI 가속기'를 구현합니다.",
+                tags: ["Advanced Packaging", "Glass Substrate", "CPO", "Hyper SOC"],
+                icon: "🧬",
+                colorClass: "border-[#0071C5]"
+            }
+        };
+
+        // Initialize Chart
+        let myChart;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('shareholderChart').getContext('2d');
+            
+            myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: shareData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '60%',
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20,
+                                font: { family: "'Noto Sans KR', sans-serif", size: 12 }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ' ' + context.label;
+                                }
+                            },
+                            backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                            padding: 12
+                        }
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                }
+            });
+
+            // Start simple conceptual animation
+            setTimeout(() => {
+                document.getElementById('integration-bar').style.width = '100%';
+                document.getElementById('integration-level-text').innerText = 'System Optimized';
+            }, 500);
+        });
+
+        // Navigation Scroll
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                const offset = 80; // header height + padding
+                const bodyRect = document.body.getBoundingClientRect().top;
+                const elementRect = element.getBoundingClientRect().top;
+                const elementPosition = elementRect - bodyRect;
+                const offsetPosition = elementPosition - offset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
+            }
+        }
+
+        // Highlight Chart Segment from Cards
+        function highlightSegment(index) {
+            if (myChart) {
+                myChart.setActiveElements([
+                    { datasetIndex: 0, index: index }
+                ]);
+                myChart.tooltip.setActiveElements([
+                   { datasetIndex: 0, index: index }
+                ]);
+                myChart.update();
+            }
+        }
+
+        // Phase Detail Interaction
+        function showPhaseDetail(phaseNum) {
+            const detailBox = document.getElementById('phase-detail');
+            const title = document.getElementById('detail-title');
+            const desc = document.getElementById('detail-desc');
+            const tags = document.getElementById('detail-tags');
+            const icon = document.getElementById('detail-icon');
+            
+            const card1 = document.getElementById('phase1-card');
+            const card2 = document.getElementById('phase2-card');
+
+            // Reset Styles
+            card1.classList.remove('border-2', 'border-[#76B900]', 'border-[#0071C5]', 'shadow-lg');
+            card2.classList.remove('border-2', 'border-[#76B900]', 'border-[#0071C5]', 'shadow-lg');
+            card1.classList.add('border', 'border-slate-200');
+            card2.classList.add('border', 'border-slate-200');
+
+            // Apply Active Style
+            const activeCard = phaseNum === 1 ? card1 : card2;
+            const color = phaseNum === 1 ? 'border-[#76B900]' : 'border-[#0071C5]';
+            
+            activeCard.classList.remove('border', 'border-slate-200');
+            activeCard.classList.add('border-2', color, 'shadow-lg');
+
+            // Update Content with Fade effect
+            detailBox.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                const data = phaseDetails[phaseNum];
+                title.innerText = data.title;
+                title.className = `text-lg font-bold ${phaseNum === 1 ? 'text-[#76B900]' : 'text-[#0071C5]'}`;
+                desc.innerText = data.desc;
+                icon.innerText = data.icon;
+                
+                // Rebuild tags
+                tags.innerHTML = '';
+                data.tags.forEach(tag => {
+                    const span = document.createElement('span');
+                    span.className = 'px-2 py-1 bg-white border border-slate-200 rounded text-xs font-medium text-slate-600';
+                    span.innerText = tag;
+                    tags.appendChild(span);
+                });
+
+                detailBox.style.opacity = '1';
+            }, 150);
+        }
+
+        // Initial Selection
+        showPhaseDetail(1);
+
+    </script>
+</body>
+</html>
