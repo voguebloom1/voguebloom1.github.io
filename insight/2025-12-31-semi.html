@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 반도체 산업 전략 분석 리포트</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+            line-height: 1.7;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        .report-section {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 2.5rem;
+            padding: 2.5rem;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 1.5rem auto;
+            height: 350px;
+        }
+        .highlight-box {
+            background-color: #f1f5f9;
+            border-left: 4px solid #2563eb;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .toc-link {
+            transition: all 0.2s;
+        }
+        .toc-link:hover {
+            color: #2563eb;
+            padding-left: 0.5rem;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .data-table th, .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: left;
+        }
+        .data-table th {
+            background-color: #f8fafc;
+        }
+    </style>
+    <!-- Chosen Palette: Professional Slate (White background, Blue/Slate accents). Focuses on readability and data density. -->
+    <!-- Application Structure Plan:
+         1. Summary: Executive snapshot.
+         2. The Cycle: Detailed analysis of the semiconductor cycle.
+         3. Price Outlook: Correlation between demand and ASP.
+         4. Financial Projections: Deep dive into Hynix/Samsung numbers.
+         5. 2027 Vision: Future CAPEX and technology nodes.
+         6. Investment Strategy: Actionable research findings.
+    -->
+    <!-- Visualization & Content Choices:
+         - Rich textual analysis for each section to ensure information density.
+         - Chart.js for visualizing price trends and profit ranges.
+         - Comparative tables for stock analysis.
+         - Interactive 'Strategy Cards' for investor decision support.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-5xl mx-auto">
+        <!-- Header -->
+        <header class="mb-12 border-b border-gray-200 pb-8">
+            <h1 class="text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">2025 반도체 산업 전망 및 전략 보고서</h1>
+            <div class="flex flex-wrap gap-4 text-sm text-slate-500">
+                <span>발행일: 2025. 01. 01</span>
+                <span>분류: 산업 분석 리포트</span>
+                <span>분석 대상: 삼성전자, SK하이닉스 및 소부장 밸류체인</span>
+            </div>
+        </header>
+
+        <!-- Table of Contents -->
+        <nav class="report-section">
+            <h2 class="text-xl font-bold mb-4 text-blue-600">목차 (Table of Contents)</h2>
+            <ul class="space-y-2 text-slate-600">
+                <li><a href="#section1" class="toc-link block">1. 반도체 슈퍼 사이클의 도래: AI 수요와 공급 제약</a></li>
+                <li><a href="#section2" class="toc-link block">2. 메모리 가격 전망: DRAM 및 NAND ASP 상승 분석</a></li>
+                <li><a href="#section3" class="toc-link block">3. 주요 기업 실적 예상: 삼성전자 vs SK하이닉스</a></li>
+                <li><a href="#section4" class="toc-link block">4. 미래 준비: 2027년 기술 초격차 및 CAPEX 집행 전략</a></li>
+                <li><a href="#section5" class="toc-link block">5. 투자 전략 연구: 밸류체인별 투자 기회 분석</a></li>
+            </ul>
+        </nav>
+
+        <!-- Section 1 -->
+        <section id="section1" class="report-section">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <span class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center mr-3 text-sm">1</span>
+                반도체 슈퍼 사이클의 도래
+            </h2>
+            <div class="prose max-w-none text-slate-700">
+                <p class="mb-4">
+                    내년 반도체 업황의 핵심 키워드는 <strong>'수요의 구조적 변화'</strong>와 <strong>'공급의 경직성'</strong>입니다. 과거의 사이클이 단순히 PC와 스마트폰의 교체 주기에 의존했다면, 이번 사이클은 생성형 AI가 주도하는 거대 인프라 구축의 결과물입니다.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+                    <div class="bg-blue-50 p-6 rounded-lg">
+                        <h4 class="font-bold text-blue-800 mb-2">수요 측면: AI 서버의 폭발적 증가</h4>
+                        <p class="text-sm">클라우드 서비스 제공자(CSP)들의 AI 연산 능력 확보 경쟁이 가속화되면서, 일반 서버 대비 메모리 탑재량이 4~8배 높은 AI 서버 수요가 전체 시장 성장을 견인하고 있습니다.</p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-lg">
+                        <h4 class="font-bold text-slate-800 mb-2">공급 측면: HBM 생산의 병목 현상</h4>
+                        <p class="text-sm">HBM(고대역폭 메모리)은 일반 DRAM보다 칩 사이즈가 크고 공정이 복잡하여 실제 웨이퍼 생산 용량을 잠식합니다. 이는 범용 DRAM 공급 부족으로 이어지는 연쇄 효과를 발생시킵니다.</p>
+                    </div>
+                </div>
+                <p>
+                    결과적으로 반도체 시장은 2024년 바닥을 통과하여 2025년 본격적인 업사이클(Up-cycle)에 진입할 것으로 분석됩니다. 이는 단순한 반등을 넘어 과거 2017-18년 이상의 수익성을 기록할 가능성이 큽니다.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 2 -->
+        <section id="section2" class="report-section">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <span class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center mr-3 text-sm">2</span>
+                메모리 가격 상승 및 수급 분석
+            </h2>
+            <div class="prose max-w-none text-slate-700">
+                <p>메모리 가격(ASP)은 재고 건전화와 고부가 제품 비중 확대로 인해 강한 상승 압력을 받고 있습니다. 아래 차트는 내년 분기별 DRAM 및 NAND 가격 상승 예상치를 보여줍니다.</p>
+                
+                <div class="chart-container">
+                    <canvas id="priceChart"></canvas>
+                </div>
+
+                <div class="highlight-box">
+                    <h4 class="font-bold mb-2">가격 상승의 3대 동인</h4>
+                    <ul class="list-disc ml-5 space-y-1">
+                        <li><strong>고부가 가치 비중 확대:</strong> HBM3E 및 DDR5 등 선단 공정 제품으로의 전환 가속화</li>
+                        <li><strong>재고의 정상화:</strong> 과잉 재고가 해소됨에 따라 공급자의 협상력(Bargaining Power) 증대</li>
+                        <li><strong>제한적 증설:</strong> 신규 팹(Fab) 가동 전까지 유효 공급 능력의 제한적 증가</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3 -->
+        <section id="section3" class="report-section">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <span class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center mr-3 text-sm">3</span>
+                내년 하이닉스, 삼성전자 영업이익 전망
+            </h2>
+            <div class="prose max-w-none text-slate-700">
+                <p class="mb-6">양사의 실적은 HBM 시장 지배력과 범용 제품의 수율 회복 속도에 따라 갈릴 것입니다. 하지만 업황 전체의 개선으로 인해 양사 모두 전년 대비 괄목할 만한 성장이 확정적입니다.</p>
+                
+                <div class="overflow-x-auto">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>구분 (단위: 조원)</th>
+                                <th>2024년 (예상)</th>
+                                <th>2025년 (전망)</th>
+                                <th>성장률(YoY)</th>
+                                <th>주요 변수</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-bold">삼성전자(DS)</td>
+                                <td>28.5</td>
+                                <td>45.0 ~ 52.0</td>
+                                <td class="text-blue-600">+72%</td>
+                                <td>HBM3E 12단 양산 수율</td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold">SK하이닉스</td>
+                                <td>25.2</td>
+                                <td>38.0 ~ 44.0</td>
+                                <td class="text-blue-600">+60%</td>
+                                <td>HBM 리더십 유지 여부</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-8">
+                    <h4 class="text-lg font-bold mb-4">분기별 영업이익 시뮬레이션</h4>
+                    <div class="flex gap-2 mb-4">
+                        <button onclick="updateProfitChart('samsung')" id="btn-samsung" class="px-4 py-2 bg-blue-600 text-white rounded-md text-sm">삼성전자 보기</button>
+                        <button onclick="updateProfitChart('hynix')" id="btn-hynix" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-md text-sm">SK하이닉스 보기</button>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="profitChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4 -->
+        <section id="section4" class="report-section">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <span class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center mr-3 text-sm">4</span>
+                이익에 따른 투자 그리고 2027년을 위한 준비
+            </h2>
+            <div class="prose max-w-none text-slate-700">
+                <p>내년에 발생할 막대한 이익은 차세대 반도체 전쟁의 실탄이 될 것입니다. 주요 기업들은 2027년까지 기술 초격차를 유지하기 위해 역대 최대 규모의 설비 투자(CAPEX)를 계획하고 있습니다.</p>
+                
+                <div class="space-y-6 mt-8">
+                    <div class="border p-6 rounded-xl border-blue-200">
+                        <h4 class="text-blue-700 font-bold mb-3 underline">핵심 투자 1: 선단 공정 전환 (1.4nm 및 3D DRAM)</h4>
+                        <p class="text-sm">삼성전자는 2027년 1.4nm 공정 양산을 목표로 EUV 노광 장비를 대거 확보하고 있습니다. 또한 SK하이닉스는 3D DRAM 기술 개발을 통해 적층 기술의 우위를 메모리 전체로 확산시키고자 합니다.</p>
+                    </div>
+                    <div class="border p-6 rounded-xl border-slate-200">
+                        <h4 class="text-slate-700 font-bold mb-3 underline">핵심 투자 2: 첨단 패키징 (Advanced Packaging)</h4>
+                        <p class="text-sm">칩을 쌓는 기술인 HBM을 넘어 하이브리드 본딩(Hybrid Bonding) 등 새로운 패키징 기술이 경쟁력을 결정합니다. 이는 단순히 칩을 만드는 것을 넘어 '어떻게 잘 쌓느냐'의 싸움으로 전환됨을 의미합니다.</p>
+                    </div>
+                    <div class="border p-6 rounded-xl border-green-200">
+                        <h4 class="text-green-700 font-bold mb-3 underline">핵심 투자 3: 글로벌 생산 기지 다변화</h4>
+                        <p class="text-sm">지정학적 리스크에 대응하기 위해 미국 테일러, 용인 클러스터 등 주요 거점에 대한 대규모 인프라 구축이 2027년까지 지속될 예정입니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5 -->
+        <section id="section5" class="report-section">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <span class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center mr-3 text-sm">5</span>
+                반도체 투자 전략 연구 및 결론
+            </h2>
+            <div class="prose max-w-none text-slate-700">
+                <p class="mb-6">분석 결과, 2025년 반도체 투자는 '대형주 중심'에서 '고성장 밸류체인'으로 확산되는 흐름을 보일 것입니다. 아래는 투자자를 위한 최종 연구 제언입니다.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-6 bg-slate-900 text-white rounded-lg">
+                        <h5 class="text-blue-400 font-bold mb-2">대형주(IDM) 전략</h5>
+                        <p class="text-sm text-slate-300">업황의 풍향계 역할을 하는 삼성전자와 SK하이닉스는 포트폴리오의 중심축입니다. 특히 HBM 수주 소식에 따른 변동성을 활용한 비중 조절이 유효합니다.</p>
+                    </div>
+                    <div class="p-6 bg-blue-700 text-white rounded-lg">
+                        <h5 class="text-blue-200 font-bold mb-2">소부장(Small-Mid Cap) 전략</h5>
+                        <p class="text-sm text-blue-100">후공정(OSAT) 및 패키징 장비 업체는 HBM 투자 수혜를 직접적으로 받습니다. 국산화 성공 가능성이 높은 소재 기업에 대한 선별적 접근이 필요합니다.</p>
+                    </div>
+                </div>
+
+                <div class="mt-10 p-8 border-2 border-blue-600 rounded-2xl">
+                    <h4 class="text-xl font-bold mb-4">투자 전략 핵심 요약 (Investment Strategy)</h4>
+                    <div class="flex flex-col space-y-4">
+                        <div class="flex items-start">
+                            <span class="text-blue-600 mr-3 text-lg">●</span>
+                            <p><strong>진입 시점:</strong> 사이클 초입인 상반기 내 비중 확대 유지</p>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-blue-600 mr-3 text-lg">●</span>
+                            <p><strong>우선 순위:</strong> HBM 밸류체인 > 전공정 노광/에칭 > 소재/특수가스</p>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-blue-600 mr-3 text-lg">●</span>
+                            <p><strong>리스크:</strong> 중국의 레거시 제품 과잉 공급 및 미국 대선 결과에 따른 보조금 불확실성</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-slate-400 text-sm py-8">
+            <p>※ 본 리포트는 공공 데이터를 기반으로 작성된 가상의 분석 보고서이며, 실제 투자 시 전문가와 상담하시기 바랍니다.</p>
+            <p class="mt-2">&copy; 2025 Semiconductor Strategic Research Lab.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Data for Charts
+        const priceData = {
+            labels: ['2024.4Q', '2025.1Q(E)', '2025.2Q(E)', '2025.3Q(E)', '2025.4Q(E)'],
+            dram: [100, 115, 132, 148, 155], // ASP Index
+            nand: [100, 108, 118, 125, 132]
+        };
+
+        const profitData = {
+            samsung: [8.5, 10.2, 12.8, 14.5, 15.2],
+            hynix: [6.8, 8.5, 10.2, 11.5, 12.0]
+        };
+
+        let priceChart, profitChart;
+
+        // Initialize Charts
+        function initCharts() {
+            // Price Trend Chart
+            const ctxPrice = document.getElementById('priceChart').getContext('2d');
+            priceChart = new Chart(ctxPrice, {
+                type: 'line',
+                data: {
+                    labels: priceData.labels,
+                    datasets: [
+                        {
+                            label: 'DRAM ASP 지수',
+                            data: priceData.dram,
+                            borderColor: '#2563eb',
+                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                            fill: true,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'NAND ASP 지수',
+                            data: priceData.nand,
+                            borderColor: '#10b981',
+                            backgroundColor: 'transparent',
+                            borderDash: [5, 5],
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: { display: true, text: '메모리 가격 상승 전망 (2024.4Q=100)' }
+                    },
+                    scales: {
+                        y: { beginAtZero: false, min: 90 }
+                    }
+                }
+            });
+
+            // Profit Projection Chart
+            const ctxProfit = document.getElementById('profitChart').getContext('2d');
+            profitChart = new Chart(ctxProfit, {
+                type: 'bar',
+                data: {
+                    labels: priceData.labels,
+                    datasets: [{
+                        label: '분기별 영업이익 전망 (조원)',
+                        data: profitData.samsung,
+                        backgroundColor: '#2563eb',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function updateProfitChart(company) {
+            const btnSamsung = document.getElementById('btn-samsung');
+            const btnHynix = document.getElementById('btn-hynix');
+
+            if (company === 'samsung') {
+                profitChart.data.datasets[0].data = profitData.samsung;
+                profitChart.data.datasets[0].backgroundColor = '#2563eb';
+                btnSamsung.classList.replace('bg-slate-200', 'bg-blue-600');
+                btnSamsung.classList.replace('text-slate-700', 'text-white');
+                btnHynix.classList.replace('bg-blue-600', 'bg-slate-200');
+                btnHynix.classList.replace('text-white', 'text-slate-700');
+            } else {
+                profitChart.data.datasets[0].data = profitData.hynix;
+                profitChart.data.datasets[0].backgroundColor = '#64748b';
+                btnHynix.classList.replace('bg-slate-200', 'bg-blue-600');
+                btnHynix.classList.replace('text-slate-700', 'text-white');
+                btnSamsung.classList.replace('bg-blue-600', 'bg-slate-200');
+                btnSamsung.classList.replace('text-white', 'text-slate-700');
+            }
+            profitChart.update();
+        }
+
+        window.onload = initCharts;
+    </script>
+</body>
+</html>
